@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/utilyre/climan/request"
 )
 
 func main() {
-	nth := flag.Int("nth", -1, "only run the nth request in the file")
+	nth := flag.Int("nth", 0, "only run the nth request in the file")
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
@@ -18,15 +20,18 @@ func main() {
 	}
 
 	filename := flag.Arg(0)
+	requests, _ := request.ParseHTTP(filename)
 
 	if ordinalized, err := ordinalize(*nth); err == nil {
 		fmt.Printf("Running the %s request of %s...\n\n", ordinalized, filename)
-
-		fmt.Println("{\"message\":\"Hello world!\"}")
+		requests[*nth-1].Run()
 		return
 	}
 
 	fmt.Printf("Running all requests of %s...\n", filename)
+	for _, request := range requests {
+		request.Run()
+	}
 }
 
 func ordinalize(num int) (string, error) {
