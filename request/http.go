@@ -1,7 +1,9 @@
 package request
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -22,15 +24,21 @@ func (self HTTPRequest) Run(data any) error {
 		}
 		defer response.Body.Close()
 
-		body, err := ioutil.ReadAll(response.Body)
+		err = unmarshalBody(response.Body, data)
+
+	case http.MethodPost:
+		body, err := json.Marshal(self.Body)
 		if err != nil {
 			return err
 		}
 
-		err = json.Unmarshal(body, data)
+		response, err := http.Post(self.URL, self.Headers["Content-Type"], bytes.NewBuffer(body))
 		if err != nil {
 			return err
 		}
+		defer response.Body.Close()
+
+		err = unmarshalBody(response.Body, data)
 	}
 
 	return nil
@@ -61,4 +69,18 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 	}
 
 	return []HTTPRequest{req1, req2, req3}, nil
+}
+
+func unmarshalBody(body io.ReadCloser, data any) error {
+	bytes, err := ioutil.ReadAll(body)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(bytes, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
