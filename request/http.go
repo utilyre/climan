@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type HTTPRequest struct {
@@ -45,30 +46,16 @@ func (self HTTPRequest) Run(data any) error {
 }
 
 func ParseHTTP(filename string) ([]HTTPRequest, error) {
-	req1 := HTTPRequest{
-		Method: http.MethodGet,
-		URL:    "https://jsonplaceholder.typicode.com/comments",
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
 	}
 
-	req2 := HTTPRequest{
-		Method: http.MethodGet,
-		URL:    "https://jsonplaceholder.typicode.com/comments/1",
-	}
+	lines := strings.Split(string(content), "\n")
+	pieces := breakIntoPieces(lines)
+	pieces = formatPieces(pieces)
 
-	req3 := HTTPRequest{
-		Method: http.MethodPost,
-		URL:    "https://jsonplaceholder.typicode.com/comments",
-		Headers: map[string]string{
-			"Content-Type": "application/json",
-		},
-		Body: map[string]any{
-			"id":   1,
-			"name": "Utilyre",
-			"body": "This is Amirabbas.",
-		},
-	}
-
-	return []HTTPRequest{req1, req2, req3}, nil
+	return []HTTPRequest{}, nil
 }
 
 func unmarshalBody(body io.ReadCloser, data any) error {
@@ -83,4 +70,64 @@ func unmarshalBody(body io.ReadCloser, data any) error {
 	}
 
 	return nil
+}
+
+func breakIntoPieces(lines []string) [][]string {
+	pieces := [][]string{}
+
+	start := 0
+	for i, line := range lines {
+		if line != "###" {
+			continue
+		}
+
+		pieces = append(pieces, lines[start:i])
+		start = i + 1
+	}
+
+	pieces = append(pieces, lines[start:])
+
+	return pieces
+}
+
+func formatPieces(pieces [][]string) [][]string {
+	for _, lines := range pieces {
+		for i, line := range lines {
+			if line == "" {
+				continue
+			}
+			if string(line[0]) != "#" || line == "###" {
+				continue
+			}
+
+			lines = append(lines[:i], lines[i+1:]...)
+		}
+	}
+
+	for i, lines := range pieces {
+		firstMeaningful := 0
+		for j, line := range lines {
+			if line == "" {
+				continue
+			}
+
+			firstMeaningful = j
+			break
+		}
+
+		lastMeaningful := len(lines) - 1
+		for j := len(lines) - 1; j >= 0; j-- {
+			line := lines[j]
+			if line == "" {
+				continue
+			}
+
+			lastMeaningful = j
+			break
+		}
+
+		pieces[i] = lines[firstMeaningful : lastMeaningful+1]
+	}
+
+	return pieces
 }
