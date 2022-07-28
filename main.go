@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	nth := flag.Int("nth", 0, "only run the nth request in the file")
+	var nth int
+	flag.IntVar(&nth, "n", 0, "only run the nth request in the file")
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
@@ -20,13 +21,13 @@ func main() {
 
 	filename := flag.Arg(0)
 	requests, _ := request.ParseHTTP(filename)
-	if *nth > len(requests) {
+	if nth > len(requests) {
 		fmt.Printf("Please enter a number less than %d.\n", len(requests))
 		os.Exit(1)
 	}
 
-	if *nth > 0 {
-		runRequest(requests[*nth-1])
+	if nth > 0 {
+		runRequest(requests[nth-1])
 		return
 	}
 
