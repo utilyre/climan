@@ -20,6 +20,10 @@ func main() {
 
 	filename := flag.Arg(0)
 	requests, _ := request.ParseHTTP(filename)
+	if *nth > len(requests) {
+		fmt.Printf("Please enter a number less than %d.\n", len(requests))
+		os.Exit(1)
+	}
 
 	if *nth > 0 {
 		runRequest(requests[*nth-1])
