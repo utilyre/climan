@@ -53,5 +53,6 @@ func runRequest(request request.HTTPRequest) {
 		fmt.Println(err.Error())
 	}
 
+  // TODO: Colored json output
 	fmt.Println(string(prettified))
 }
