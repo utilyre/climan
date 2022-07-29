@@ -53,7 +53,8 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 
 	lines := strings.Split(string(content), "\n")
 	pieces := breakIntoPieces(lines)
-	pieces = formatPieces(pieces)
+	pieces = removeComments(pieces)
+	pieces = removeEmptyLines(pieces)
 
 	return []HTTPRequest{}, nil
 }
@@ -89,7 +90,7 @@ func breakIntoPieces(lines []string) [][]string {
 	return pieces
 }
 
-func formatPieces(pieces [][]string) [][]string {
+func removeComments(pieces [][]string) [][]string {
 	for _, lines := range pieces {
 		for i := len(lines) - 1; i >= 0; i-- {
 			line := lines[i]
@@ -104,6 +105,10 @@ func formatPieces(pieces [][]string) [][]string {
 		}
 	}
 
+	return pieces
+}
+
+func removeEmptyLines(pieces [][]string) [][]string {
 	for i, lines := range pieces {
 		firstMeaningful := 0
 		for j, line := range lines {
