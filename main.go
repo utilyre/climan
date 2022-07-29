@@ -4,55 +4,52 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/utilyre/climan/request"
 )
 
 func main() {
-	var nth int
-	flag.IntVar(&nth, "n", 0, "only run the nth request in the file")
-	flag.Parse()
+	log.SetFlags(0)
+	log.SetPrefix("climan: ")
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println(err)
+		}
+	}()
 
-	if len(flag.Args()) == 0 {
-		flag.Usage()
-		os.Exit(2)
+	var nth int
+	flag.IntVar(&nth, "n", 0, "run the nth request of <filename>")
+
+	flag.Parse()
+	if nth <= 0 {
+		panic("n must be greater than 0")
 	}
 
 	filename := flag.Arg(0)
-	requests, _ := request.ParseHTTP(filename)
-	if nth > len(requests) {
-		fmt.Printf("Please enter a number less than %d.\n", len(requests))
-		os.Exit(1)
+	if filename == "" {
+		panic("missing filename")
 	}
 
-	if nth > 0 {
-		runRequest(requests[nth-1])
-		return
-	}
-
-	for i, request := range requests {
-		runRequest(request)
-
-		if i < len(requests)-1 {
-			fmt.Println("~")
-		}
-	}
-}
-
-func runRequest(request request.HTTPRequest) {
-	var data any
-
-	err := request.Run(&data)
+	requests, err := request.ParseHTTP(filename)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err)
+	}
+	if nth > len(requests) {
+		panic(fmt.Sprintf("n must be less than %d\n", len(requests)))
+	}
+
+	var data any
+	err = requests[nth-1].Run(&data)
+	if err != nil {
+		panic(err)
 	}
 
 	prettified, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err)
 	}
 
-  // TODO: Colored json output
+	// TODO: Colored json output
 	fmt.Println(string(prettified))
 }
