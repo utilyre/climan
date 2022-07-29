@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
 type HTTPRequest struct {
@@ -15,6 +18,18 @@ type HTTPRequest struct {
 	URL     string
 	Headers map[string]string
 	Body    map[string]any
+}
+
+var methods []string = []string{
+	http.MethodGet,
+	http.MethodHead,
+	http.MethodPost,
+	http.MethodPut,
+	http.MethodDelete,
+	http.MethodConnect,
+	http.MethodOptions,
+	http.MethodTrace,
+	http.MethodPatch,
 }
 
 func (self HTTPRequest) Run(data any) error {
@@ -62,19 +77,27 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 	pieces := breakIntoPieces(lines)
 	pieces = removeComments(pieces)
 	pieces = removeEmptyLines(pieces)
+	// TODO: removeTrailingWhitespace
 
 	requests := []HTTPRequest{}
 
-	for _, lines := range pieces {
+	for i, lines := range pieces {
 		request := HTTPRequest{
 			Headers: map[string]string{},
 			Body:    map[string]any{},
 		}
 
 		haveHeadersEnded := false
-		for i, line := range lines {
-			if i == 0 {
+		for j, line := range lines {
+			if j == 0 {
 				parts := strings.Split(line, " ")
+				if len(parts) != 2 {
+					return nil, errors.New(fmt.Sprintf("expected a http method followed by a url separated by one space in the #%d request", i+1))
+				}
+				if !slices.Contains(methods, parts[0]) {
+					return nil, errors.New(fmt.Sprintf("expected a http method instead of `%s` in the #%d request", parts[0], i+1))
+				}
+
 				request.Method = parts[0]
 				request.URL = parts[1]
 				continue
@@ -85,7 +108,11 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 					continue
 				}
 
-				parts := strings.Split(line, ": ")
+				parts := strings.SplitN(line, ": ", 2)
+				if len(parts) < 2 {
+					return nil, errors.New(fmt.Sprintf("expected a key follows by a value in headers of #%d request", i+i))
+				}
+
 				request.Headers[parts[0]] = parts[1]
 				continue
 			}
@@ -93,7 +120,7 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 				continue
 			}
 
-			body := strings.Join(lines[i:], "\n")
+			body := strings.Join(lines[j:], "\n")
 			err := json.Unmarshal([]byte(body), &request.Body)
 			if err != nil {
 				return nil, err
