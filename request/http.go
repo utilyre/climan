@@ -13,7 +13,7 @@ type HTTPRequest struct {
 	Method  string
 	URL     string
 	Headers map[string]string
-	Body    any
+	Body    map[string]any
 }
 
 func (self HTTPRequest) Run(data any) error {
@@ -56,7 +56,48 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 	pieces = removeComments(pieces)
 	pieces = removeEmptyLines(pieces)
 
-	return []HTTPRequest{}, nil
+	requests := []HTTPRequest{}
+
+	for _, lines := range pieces {
+		request := HTTPRequest{
+			Headers: map[string]string{},
+			Body:    map[string]any{},
+		}
+
+		haveHeadersEnded := false
+		for i, line := range lines {
+			if i == 0 {
+				parts := strings.Split(line, " ")
+				request.Method = parts[0]
+				request.URL = parts[1]
+				continue
+			}
+			if !haveHeadersEnded {
+				if line == "" {
+					haveHeadersEnded = true
+					continue
+				}
+
+				parts := strings.Split(line, ": ")
+				request.Headers[parts[0]] = parts[1]
+				continue
+			}
+			if line == "" {
+				continue
+			}
+
+			body := strings.Join(lines[i:], "\n")
+			err := json.Unmarshal([]byte(body), &request.Body)
+			if err != nil {
+				return nil, err
+			}
+			break
+		}
+
+		requests = append(requests, request)
+	}
+
+	return requests, nil
 }
 
 func unmarshalBody(body io.ReadCloser, data any) error {
