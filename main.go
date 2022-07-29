@@ -31,8 +31,12 @@ func main() {
 		return
 	}
 
-	for _, request := range requests {
+	for i, request := range requests {
 		runRequest(request)
+
+		if i < len(requests)-1 {
+			fmt.Println("~")
+		}
 	}
 }
 
