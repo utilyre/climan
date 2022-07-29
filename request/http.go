@@ -3,6 +3,7 @@ package request
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -33,7 +34,12 @@ func (self HTTPRequest) Run(data any) error {
 			return err
 		}
 
-		response, err := http.Post(self.URL, self.Headers["Content-Type"], bytes.NewBuffer(body))
+		contentType, ok := self.Headers["Content-Type"]
+		if !ok {
+			return errors.New("missing `Content-Type` header")
+		}
+
+		response, err := http.Post(self.URL, contentType, bytes.NewBuffer(body))
 		if err != nil {
 			return err
 		}
