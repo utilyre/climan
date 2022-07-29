@@ -36,7 +36,7 @@ func main() {
 		panic(err)
 	}
 	if nth > len(requests) {
-		panic(fmt.Sprintf("n must be less than %d\n", len(requests)))
+		panic(fmt.Sprintf("n must be less than %d", len(requests)))
 	}
 
 	var data any
