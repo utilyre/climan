@@ -45,11 +45,10 @@ func main() {
 		panic(err)
 	}
 
-	prettified, err := json.MarshalIndent(data, "", "  ")
+	raw, err := json.Marshal(data)
 	if err != nil {
 		panic(err)
 	}
 
-	// TODO: Colored json output
-	fmt.Println(string(prettified))
+	fmt.Println(string(raw))
 }
