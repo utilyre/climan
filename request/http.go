@@ -84,7 +84,6 @@ func breakIntoPieces(lines []string) [][]string {
 		pieces = append(pieces, lines[start:i])
 		start = i + 1
 	}
-
 	pieces = append(pieces, lines[start:])
 
 	return pieces
@@ -92,7 +91,8 @@ func breakIntoPieces(lines []string) [][]string {
 
 func formatPieces(pieces [][]string) [][]string {
 	for _, lines := range pieces {
-		for i, line := range lines {
+		for i := len(lines) - 1; i >= 0; i-- {
+			line := lines[i]
 			if line == "" {
 				continue
 			}
