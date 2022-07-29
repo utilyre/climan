@@ -18,7 +18,7 @@ type HTTPRequest struct {
 }
 
 func (self HTTPRequest) Run(data any) error {
-  // TODO: Handle all http methods with `NewRequestWithContext`
+	// TODO: Handle all http methods with `NewRequestWithContext`
 	switch self.Method {
 	case http.MethodGet:
 		response, err := http.Get(self.URL)
