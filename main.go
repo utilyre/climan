@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/utilyre/climan/request"
 )
@@ -15,6 +16,7 @@ func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println(err)
+			os.Exit(1)
 		}
 	}()
 
