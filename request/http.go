@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -33,35 +32,34 @@ var methods []string = []string{
 }
 
 func (self HTTPRequest) Run(data any) error {
-	// TODO: Handle all http methods with `NewRequestWithContext`
-	switch self.Method {
-	case http.MethodGet:
-		response, err := http.Get(self.URL)
-		if err != nil {
-			return err
-		}
-		defer response.Body.Close()
+	body, err := json.Marshal(self.Body)
+	if err != nil {
+		return err
+	}
 
-		err = unmarshalBody(response.Body, data)
+	req, err := http.NewRequest(self.Method, self.URL, bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
 
-	case http.MethodPost:
-		body, err := json.Marshal(self.Body)
-		if err != nil {
-			return err
-		}
+	for k, v := range self.Headers {
+		req.Header.Set(k, v)
+	}
 
-		contentType, ok := self.Headers["Content-Type"]
-		if !ok {
-			return errors.New("missing `Content-Type` header")
-		}
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
 
-		response, err := http.Post(self.URL, contentType, bytes.NewBuffer(body))
-		if err != nil {
-			return err
-		}
-		defer response.Body.Close()
+	bytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
 
-		err = unmarshalBody(response.Body, data)
+	err = json.Unmarshal(bytes, data)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -132,20 +130,6 @@ func ParseHTTP(filename string) ([]HTTPRequest, error) {
 	}
 
 	return requests, nil
-}
-
-func unmarshalBody(body io.ReadCloser, data any) error {
-	bytes, err := ioutil.ReadAll(body)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(bytes, data)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func breakIntoPieces(lines []string) [][]string {
