@@ -80,6 +80,8 @@ In this case, since we set `application/json` as `Content-Type` we need to
 specify a request body. As you've probably noticed the request body should (at
 least) have a single empty line before its beginning.
 
+See [examples](/examples)
+
 ## 🔖 Todos
 
 - [ ] Support for other request body types (like `text/xml` and `text/plain`).
