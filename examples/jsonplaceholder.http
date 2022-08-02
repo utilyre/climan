@@ -1,0 +1,35 @@
+# Reads all the posts
+GET https://jsonplaceholder.typicode.com/posts
+
+###
+
+# Reads all comments under the first post
+GET https://jsonplaceholder.typicode.com/comments?postId=1
+
+###
+
+# Updates the first post
+PUT https://jsonplaceholder.typicode.com/posts/1
+Content-Type: application/json
+
+# Changes title to "Edited"
+{
+  "title": "Edited"
+}
+
+###
+
+# Creates a new post
+POST https://jsonplaceholder.typicode.com/posts
+Content-Type: application/json
+
+{
+  "userId": 100,
+  "title": "A post from climan!",
+  "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Hoc simile tandem est? Non est ista, inquam, Piso, magna dissensio. Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo."
+}
+
+###
+
+# Deletes the first post
+DELETE https://jsonplaceholder.typicode.com/posts/1
