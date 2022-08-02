@@ -5,10 +5,23 @@ couldn't find a gopher emoji)
 
 ## 📦 Installation
 
-Intall via go:
+Intall via go
 
 ```bash
 go install github.com/utilyre/climan
+```
+
+If you're using neovim you might need to add http file detection
+
+```lua
+-- ~/.config/nvim/ftdetect/http.lua
+
+vim.api.nvim_create_augroup("fthttp", {})
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = "fthttp",
+  pattern = "*.http",
+  callback = function(a) vim.bo[a.buf].filetype = "http" end,
+})
 ```
 
 ## 🚀 Usage
