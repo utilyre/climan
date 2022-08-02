@@ -5,7 +5,7 @@ couldn't find a gopher emoji)
 
 ## 📦 Installation
 
-Intall via go
+Install via go
 
 ```bash
 go install github.com/utilyre/climan
@@ -68,21 +68,21 @@ Content-Type: application/json
 }
 ```
 
-Woah woah woah, we got a lot to talk about here. `###` is a special type of
-comment that separates requests. Here we have a simple *GET* request to
-`jsonplaceholder` api which is pretty similiar to the previous example.
+Whoa whoa whoa, we got a lot to talk about here. `###` is a special type of
+comment that separates requests. Here we have a simple `GET` request to
+`jsonplaceholder` API which is pretty similar to the previous example.
 
-But we also got a *PUT* request after the *GET* request (notice they are
-separated by `###`). And right after the url line you can put as much headers
+But we also got a `PUT` request after the `GET` request (notice they are
+separated by `###`). And right after the URL line you can put as much headers
 as you want in a form like `name: value`.
 
-In this case, since we set application/json as `Content-Type` we need to
+In this case, since we set `application/json` as `Content-Type` we need to
 specify a request body. As you've probably noticed the request body should (at
 least) have a single empty line before its beginning.
 
 ## 🔖 Todos
 
-- [ ] Support for other request body types (like xml and plain text).
+- [ ] Support for other request body types (like `text/xml` and `text/plain`).
 - [ ] Parse the response body base on `Content-Type` header.
 
 ## 📢 Credits
