@@ -1,7 +1,6 @@
-# CLIMan
+# ✨ CLI Man
 
-Parse and run `.http` files from command line blazingly fast! 🦔 (idk I
-couldn't find a gopher emoji)
+Make http requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
@@ -11,7 +10,7 @@ Install via go
 go install github.com/utilyre/climan
 ```
 
-If you're using neovim you might need to add http file detection
+If you're using neovim you might need to add http file detection as well
 
 ```lua
 -- ~/.config/nvim/ftdetect/http.lua
@@ -42,7 +41,7 @@ climan -n 1 test.http
 
 Now let's see what we just ran
 
-- `-n 1`: Tells climan to run the first request
+- `-n 1`: Tells climan to make the first request
 - `test.http`: The file we've just created
 
 So you might be thinking
@@ -72,7 +71,7 @@ Whoa whoa whoa, we got a lot to talk about here. `###` is a special type of
 comment that separates requests. Here we have a simple `GET` request to
 `jsonplaceholder` API which is pretty similar to the previous example.
 
-But we also got a `PUT` request after the `GET` request (notice they are
+But there is also a `PUT` request after the `GET` request (notice they are
 separated by `###`). And right after the URL line you can put as much headers
 as you want in a form like `name: value`.
 
@@ -80,7 +79,15 @@ In this case, since we set `application/json` as `Content-Type` we need to
 specify a request body. As you've probably noticed the request body should (at
 least) have a single empty line before its beginning.
 
-See [examples](/examples)
+By the way, you can run the second request with this command
+
+```bash
+climan -n 2 multi-request.http
+```
+
+**NOTE**: A line is considered a comment only if its *first character* is `#`.
+
+For more examples see [examples](/examples).
 
 ## 🔖 Todos
 
