@@ -85,7 +85,7 @@ By the way, you can run the second request with this command
 climan -n 2 multi-request.http
 ```
 
-**NOTE**: A line is considered a comment only if its *first character* is `#`.
+**NOTE**: A line is considered a comment only if its _first character_ is `#`.
 
 For more examples see [examples](/examples).
 
@@ -93,6 +93,8 @@ For more examples see [examples](/examples).
 
 - [ ] Support for other request body types (like `text/xml` and `text/plain`).
 - [ ] Parse the response body base on `Content-Type` header.
+- [ ] Show response details.
+- [ ] Colored output.
 
 ## 📢 Credits
 
