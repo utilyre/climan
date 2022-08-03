@@ -35,7 +35,7 @@ func main() {
 	}
 
 	var data any
-	err = requests[nth-1].Run(&data)
+	err = requests[nth-1].Do(&data)
 	if err != nil {
 		log.Fatalln(err)
 	}

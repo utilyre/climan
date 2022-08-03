@@ -31,7 +31,7 @@ var methods []string = []string{
 	http.MethodPatch,
 }
 
-func (self HTTPRequest) Run(data any) error {
+func (self HTTPRequest) Do(data any) error {
 	body, err := json.Marshal(self.Body)
 	if err != nil {
 		return err
