@@ -14,12 +14,8 @@ func main() {
 	log.SetPrefix("climan: ")
 
 	var nth int
-	flag.IntVar(&nth, "n", 0, "run the nth request of <filename>")
-
+	flag.IntVar(&nth, "n", 1, "run the nth request of <filename>")
 	flag.Parse()
-	if nth <= 0 {
-		log.Fatalln("n must be greater than 0")
-	}
 
 	filename := flag.Arg(0)
 	if filename == "" {
@@ -29,6 +25,10 @@ func main() {
 	requests, err := httpparser.Parse(filename)
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	if nth <= 0 {
+		log.Fatalln("n must be greater than 0")
 	}
 	if nth > len(requests) {
 		log.Fatalln(fmt.Sprintf("n must be less than %d", len(requests)))
