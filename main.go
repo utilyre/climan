@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/utilyre/climan/httpparser"
 )
@@ -34,16 +36,32 @@ func main() {
 		log.Fatalln(fmt.Sprintf("n must be less than %d", len(requests)))
 	}
 
+	buf, err := doRequest(requests[nth-1])
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(string(buf))
+}
+
+func doRequest(req http.Request) ([]byte, error) {
+	res, err := http.DefaultClient.Do(&req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	buf, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	var data any
-	err = requests[nth-1].Do(&data)
+
+	err = json.Unmarshal(buf, &data)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
-	raw, err := json.Marshal(data)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Println(string(raw))
+	return json.Marshal(data)
 }

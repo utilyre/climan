@@ -12,14 +12,10 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type HTTPRequest struct {
-	Method  string
-	URL     string
-	Headers map[string]string
-	Body    map[string]any
-}
+type header map[string]string
+type body map[string]any
 
-var methods []string = []string{
+var methods = []string{
 	http.MethodGet,
 	http.MethodHead,
 	http.MethodPost,
@@ -31,41 +27,7 @@ var methods []string = []string{
 	http.MethodPatch,
 }
 
-func (self HTTPRequest) Do(data any) error {
-	body, err := json.Marshal(self.Body)
-	if err != nil {
-		return err
-	}
-
-	req, err := http.NewRequest(self.Method, self.URL, bytes.NewBuffer(body))
-	if err != nil {
-		return err
-	}
-
-	for k, v := range self.Headers {
-		req.Header.Set(k, v)
-	}
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
-
-	bytes, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(bytes, data)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Parse(filename string) ([]HTTPRequest, error) {
+func Parse(filename string) ([]http.Request, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -77,13 +39,13 @@ func Parse(filename string) ([]HTTPRequest, error) {
 	pieces = removeEmptyLines(pieces)
 	// TODO: removeTrailingWhitespace
 
-	requests := []HTTPRequest{}
+	reqs := []http.Request{}
 
 	for i, lines := range pieces {
-		request := HTTPRequest{
-			Headers: map[string]string{},
-			Body:    map[string]any{},
-		}
+		var method string
+		var url string
+		var headers = header{}
+		var body body
 
 		haveHeadersEnded := false
 		for j, line := range lines {
@@ -96,8 +58,8 @@ func Parse(filename string) ([]HTTPRequest, error) {
 					return nil, errors.New(fmt.Sprintf("expected a http method instead of `%s` in the #%d request", parts[0], i+1))
 				}
 
-				request.Method = parts[0]
-				request.URL = parts[1]
+				method = parts[0]
+				url = parts[1]
 				continue
 			}
 			if !haveHeadersEnded {
@@ -111,25 +73,38 @@ func Parse(filename string) ([]HTTPRequest, error) {
 					return nil, errors.New(fmt.Sprintf("expected a key follows by a value in headers of #%d request", i+i))
 				}
 
-				request.Headers[parts[0]] = parts[1]
+				headers[parts[0]] = parts[1]
 				continue
 			}
 			if line == "" {
 				continue
 			}
 
-			body := strings.Join(lines[j:], "\n")
-			err := json.Unmarshal([]byte(body), &request.Body)
+			err := json.Unmarshal([]byte(strings.Join(lines[j:], "\n")), &body)
 			if err != nil {
 				return nil, err
 			}
 			break
 		}
 
-		requests = append(requests, request)
+		buf, err := json.Marshal(body)
+		if err != nil {
+			return nil, err
+		}
+
+		req, err := http.NewRequest(method, url, bytes.NewBuffer(buf))
+		if err != nil {
+			return nil, err
+		}
+
+		for k, v := range headers {
+			req.Header.Set(k, v)
+		}
+
+		reqs = append(reqs, *req)
 	}
 
-	return requests, nil
+	return reqs, nil
 }
 
 func breakIntoPieces(lines []string) [][]string {
