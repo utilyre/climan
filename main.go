@@ -18,7 +18,7 @@ func main() {
 	var nth int
 	flag.IntVar(&nth, "n", 1, "run the nth request of <filename>")
 	var showResHeader bool
-	flag.BoolVar(&showResHeader, "h", false, "show response header")
+	flag.BoolVar(&showResHeader, "v", false, "show response header")
 	flag.Parse()
 
 	filename := flag.Arg(0)
