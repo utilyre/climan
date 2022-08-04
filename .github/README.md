@@ -92,8 +92,8 @@ For more examples see [examples](/examples).
 ## 🔖 Todos
 
 - [ ] Support for other request body types (like `text/xml` and `text/plain`).
-- [ ] Parse the response body base on `Content-Type` header.
-- [ ] Show response details.
+- [x] Parse the response body base on `Content-Type` header.
+- [x] Show response details.
 - [ ] Colored output.
 
 ## 📢 Credits
