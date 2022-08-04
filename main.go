@@ -35,7 +35,7 @@ func main() {
 		log.Fatalln("n must be greater than 0")
 	}
 	if nth > len(reqs) {
-		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)))
+		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)+1))
 	}
 
 	res, err := http.DefaultClient.Do(&reqs[nth-1])
