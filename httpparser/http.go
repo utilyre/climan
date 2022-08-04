@@ -44,10 +44,10 @@ func Parse(filename string) ([]http.Request, error) {
 	for i, lines := range pieces {
 		var method string
 		var url string
-		var headers = header{}
+		var header = header{}
 		var body body
 
-		haveHeadersEnded := false
+		hasHeaderEnded := false
 		for j, line := range lines {
 			if j == 0 {
 				parts := strings.Split(line, " ")
@@ -62,18 +62,18 @@ func Parse(filename string) ([]http.Request, error) {
 				url = parts[1]
 				continue
 			}
-			if !haveHeadersEnded {
+			if !hasHeaderEnded {
 				if line == "" {
-					haveHeadersEnded = true
+					hasHeaderEnded = true
 					continue
 				}
 
 				parts := strings.SplitN(line, ": ", 2)
 				if len(parts) < 2 {
-					return nil, errors.New(fmt.Sprintf("expected a key follows by a value in headers of #%d request", i+i))
+					return nil, errors.New(fmt.Sprintf("expected a key follows by a value in header of #%d request", i+i))
 				}
 
-				headers[parts[0]] = parts[1]
+				header[parts[0]] = parts[1]
 				continue
 			}
 			if line == "" {
@@ -97,7 +97,7 @@ func Parse(filename string) ([]http.Request, error) {
 			return nil, err
 		}
 
-		for k, v := range headers {
+		for k, v := range header {
 			req.Header.Set(k, v)
 		}
 
