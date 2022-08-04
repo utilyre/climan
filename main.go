@@ -24,7 +24,7 @@ func main() {
 		log.Fatalln("missing filename")
 	}
 
-	requests, err := httpparser.Parse(filename)
+	reqs, err := httpparser.Parse(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -32,36 +32,36 @@ func main() {
 	if nth <= 0 {
 		log.Fatalln("n must be greater than 0")
 	}
-	if nth > len(requests) {
-		log.Fatalln(fmt.Sprintf("n must be less than %d", len(requests)))
+	if nth > len(reqs) {
+		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)))
 	}
 
-	buf, err := doRequest(requests[nth-1])
+	res, err := http.DefaultClient.Do(&reqs[nth-1])
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer res.Body.Close()
+
+	bufBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	fmt.Println(string(buf))
-}
-
-func doRequest(req http.Request) ([]byte, error) {
-	res, err := http.DefaultClient.Do(&req)
+	var body any
+	err = json.Unmarshal(bufBody, &body)
 	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	buf, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
+		log.Fatalln(err)
 	}
 
-	var data any
-
-	err = json.Unmarshal(buf, &data)
+	strBody, err := json.MarshalIndent(body, "", "  ")
 	if err != nil {
-		return nil, err
+		log.Fatalln(err)
 	}
 
-	return json.Marshal(data)
+	for k, v := range res.Header {
+		fmt.Printf("%s: %s\n", k, v[0])
+	}
+
+	fmt.Println()
+	fmt.Println(string(strBody))
 }
