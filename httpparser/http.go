@@ -1,4 +1,4 @@
-package request
+package httpparser
 
 import (
 	"bytes"
@@ -65,7 +65,7 @@ func (self HTTPRequest) Do(data any) error {
 	return nil
 }
 
-func ParseHTTP(filename string) ([]HTTPRequest, error) {
+func Parse(filename string) ([]HTTPRequest, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

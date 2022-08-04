@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/utilyre/climan/request"
+	"github.com/utilyre/climan/httpparser"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		log.Fatalln("missing filename")
 	}
 
-	requests, err := request.ParseHTTP(filename)
+	requests, err := httpparser.Parse(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
