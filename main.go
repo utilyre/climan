@@ -17,8 +17,8 @@ func main() {
 
 	var nth int
 	flag.IntVar(&nth, "n", 1, "run the nth request of <filename>")
-	var showResHeader bool
-	flag.BoolVar(&showResHeader, "v", false, "show response header")
+	var showDetails bool
+	flag.BoolVar(&showDetails, "d", false, "show details")
 	flag.Parse()
 
 	filename := flag.Arg(0)
@@ -44,7 +44,7 @@ func main() {
 	}
 	defer res.Body.Close()
 
-	if showResHeader {
+	if showDetails {
 		for k, v := range res.Header {
 			fmt.Printf("%s: %s\n", k, v[0])
 		}
