@@ -44,27 +44,30 @@ func main() {
 	}
 	defer res.Body.Close()
 
-	bufBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	var body any
-	err = json.Unmarshal(bufBody, &body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	strBody, err := json.MarshalIndent(body, "", "  ")
-	if err != nil {
-		log.Fatalln(err)
-	}
-
 	if showResHeader {
 		for k, v := range res.Header {
 			fmt.Printf("%s: %s\n", k, v[0])
 		}
 		fmt.Println()
+	}
+
+	bufBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	strBody := bufBody
+	if contentType, ok := res.Header["Content-Type"]; ok && contentType[0] == "application/json" {
+		var body any
+		err = json.Unmarshal(bufBody, &body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		strBody, err = json.MarshalIndent(body, "", "  ")
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	fmt.Println(string(strBody))
