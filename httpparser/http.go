@@ -8,24 +8,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"golang.org/x/exp/slices"
 )
 
 type header map[string]string
 type body map[string]any
-
-var methods = []string{
-	http.MethodGet,
-	http.MethodHead,
-	http.MethodPost,
-	http.MethodPut,
-	http.MethodDelete,
-	http.MethodConnect,
-	http.MethodOptions,
-	http.MethodTrace,
-	http.MethodPatch,
-}
 
 func Parse(filename string) ([]http.Request, error) {
 	content, err := ioutil.ReadFile(filename)
@@ -54,7 +40,7 @@ func Parse(filename string) ([]http.Request, error) {
 				if len(parts) != 2 {
 					return nil, errors.New(fmt.Sprintf("expected a http method followed by a url separated by one space in the #%d request", i+1))
 				}
-				if !slices.Contains(methods, parts[0]) {
+				if !isValidMethod(parts[0]) {
 					return nil, errors.New(fmt.Sprintf("expected a http method instead of `%s` in the #%d request", parts[0], i+1))
 				}
 
@@ -169,4 +155,16 @@ func removeEmptyLines(pieces [][]string) [][]string {
 	}
 
 	return pieces
+}
+
+func isValidMethod(method string) bool {
+	return method == http.MethodGet ||
+		method == http.MethodHead ||
+		method == http.MethodPost ||
+		method == http.MethodPut ||
+		method == http.MethodDelete ||
+		method == http.MethodConnect ||
+		method == http.MethodOptions ||
+		method == http.MethodTrace ||
+		method == http.MethodPatch
 }
