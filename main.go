@@ -2,12 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
+	"github.com/droundy/goopt"
 	"github.com/utilyre/climan/httpparser"
 )
 
@@ -15,30 +15,30 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
-	var nth int
-	flag.IntVar(&nth, "n", 1, "run the nth request of <filename>")
-	var showDetails bool
-	flag.BoolVar(&showDetails, "d", false, "show details")
-	flag.Parse()
+	goopt.Version = "0.0.0"
+	goopt.Summary = "climan [OPTIONS] -- <file>"
+	goopt.Description = func() string { return "A file based HTTP client" }
+	verbose := goopt.Flag([]string{"-v", "--verbose"}, []string{"-q", "--quiet"}, "output verbosely", "be quiet")
+	nth := goopt.Int([]string{"-r", "--request"}, 1, "determines which request to do")
 
-	filename := flag.Arg(0)
-	if filename == "" {
-		log.Fatalln("missing filename")
+	goopt.Parse(nil)
+	if len(goopt.Args) != 1 {
+		log.Fatalln("missing file")
 	}
 
-	reqs, err := httpparser.Parse(filename)
+	reqs, err := httpparser.Parse(goopt.Args[0])
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if nth <= 0 {
+	if *nth <= 0 {
 		log.Fatalln("n must be greater than 0")
 	}
-	if nth > len(reqs) {
+	if *nth > len(reqs) {
 		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)+1))
 	}
 
-	res, err := http.DefaultClient.Do(&reqs[nth-1])
+	res, err := http.DefaultClient.Do(&reqs[*nth-1])
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -48,7 +48,7 @@ func main() {
 		log.Fatalln(res.Status)
 	}
 
-	if showDetails {
+	if *verbose {
 		for k, v := range res.Header {
 			fmt.Printf("%s: %s\n", k, v[0])
 		}
