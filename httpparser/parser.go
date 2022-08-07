@@ -17,10 +17,10 @@ func Parse(filename string) ([]http.Request, error) {
 	}
 
 	lines := strings.Split(string(content), "\n")
+	lines = trimSpace(lines)
+	lines = removeComments(lines)
 	pieces := breakIntoPieces(lines)
-	pieces = removeComments(pieces)
 	pieces = removeEmptyLines(pieces)
-	// TODO: removeTrailingWhitespace
 
 	reqs := []http.Request{}
 
@@ -90,6 +90,30 @@ func Parse(filename string) ([]http.Request, error) {
 	return reqs, nil
 }
 
+func trimSpace(lines []string) []string {
+	for i, line := range lines {
+		lines[i] = strings.TrimSpace(line)
+	}
+
+	return lines
+}
+
+func removeComments(lines []string) []string {
+	for i := len(lines) - 1; i >= 0; i-- {
+		line := lines[i]
+		if line == "" {
+			continue
+		}
+		if string(line[0]) != "#" || line == "###" {
+			continue
+		}
+
+		lines = append(lines[:i], lines[i+1:]...)
+	}
+
+	return lines
+}
+
 func breakIntoPieces(lines []string) [][]string {
 	pieces := [][]string{}
 
@@ -103,24 +127,6 @@ func breakIntoPieces(lines []string) [][]string {
 		start = i + 1
 	}
 	pieces = append(pieces, lines[start:])
-
-	return pieces
-}
-
-func removeComments(pieces [][]string) [][]string {
-	for _, lines := range pieces {
-		for i := len(lines) - 1; i >= 0; i-- {
-			line := lines[i]
-			if line == "" {
-				continue
-			}
-			if string(line[0]) != "#" || line == "###" {
-				continue
-			}
-
-			lines = append(lines[:i], lines[i+1:]...)
-		}
-	}
 
 	return pieces
 }
