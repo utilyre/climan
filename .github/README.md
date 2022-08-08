@@ -25,67 +25,45 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 
 ## 🚀 Usage
 
-Create a file with the following content
+Http file template
 
 ```http
-# test.http
+# example.http
 
-GET https://jsonplaceholder.typicode.com/posts
-```
+# Method URL
+POST http://localhost:8080
+# Header: Value
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
 
-And run this command on the file
+# Body (only json is supported for now)
+{
+  "title": "climan",
+  "description": "A file based HTTP client"
+}
 
-```bash
-climan -n 1 test.http
-```
-
-Now let's see what we just ran
-
-- `-n 1`: Tells climan to make the first request
-- `test.http`: The file we've just created
-
-So you might be thinking
-
-> Can I have multiple requests in a single file?
-
-Yes, you have the option to do that. Let's move on to another example.
-
-Paste this in another file
-
-```http
-# multi-request.http
-
-GET https://jsonplaceholder.typicode.com/comments?postId=1
-
+# The next line is an special type of comment that separates requests
 ###
 
-PUT https://jsonplaceholder.typicode.com/posts/1
-Content-Type: application/json
-
-{
-  "title": "Edited"
-}
+GET http://localhost:8080
+User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
 ```
 
-Whoa whoa whoa, we got a lot to talk about here. `###` is a special type of
-comment that separates requests. Here we have a simple `GET` request to
-`jsonplaceholder` API which is pretty similar to the previous example.
+**NOTE**: Trailing comments are _NOT_ available.
 
-But there is also a `PUT` request after the `GET` request (notice they are
-separated by `###`). And right after the URL line you can put as much headers
-as you want in a form like `name: value`.
-
-In this case, since we set `application/json` as `Content-Type` we need to
-specify a request body. As you've probably noticed the request body should (at
-least) have a single empty line before its beginning.
-
-By the way, you can run the second request with this command
+Example commands
 
 ```bash
-climan -n 2 multi-request.http
+climan example.http
 ```
 
-**NOTE**: A line is considered a comment only if its _first character_ is `#`.
+```bash
+climan -r 2 example.http
+```
+
+```bash
+climan -v example.http
+```
 
 For more examples see [examples](/examples).
 
