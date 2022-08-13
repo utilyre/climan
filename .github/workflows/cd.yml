@@ -17,9 +17,9 @@ jobs:
         with:
           go-version: 1.18
       - name: Compilation
-        run: env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o output
+        run: env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan
       - name: Distribution
-        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz output
+        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
