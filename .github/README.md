@@ -7,7 +7,7 @@ Make http requests from command line **BLAZINGLY FASTER**!
 Install via go
 
 ```bash
-go install github.com/utilyre/climan
+go install github.com/utilyre/climan@latest
 ```
 
 If you're using neovim you might need to add http file detection as well
