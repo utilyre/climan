@@ -19,15 +19,20 @@ jobs:
       - name: Compilation
         run: env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o output
       - name: Distribution
-        run: |
-          mkdir -p dist
-          tar --remove-files -czf dist/climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz output
+        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz output
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-${{ matrix.arch }}
+          path: climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: dist
       - uses: softprops/action-gh-release@v1
         with:
-          files: dist/*
+          files: dist/*/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
