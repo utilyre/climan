@@ -12,15 +12,18 @@ jobs:
         os: [linux, darwin]
         arch: [amd64, arm64]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - name: Checkout version tag
+        uses: actions/checkout@v3
+      - name: Set golang up
+        uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - name: Compilation
+      - name: Compile source code
         run: env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan
-      - name: Distribution
+      - name: Archive binary
         run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan
-      - uses: actions/upload-artifact@v3
+      - name: Create artifact assets
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
           path: climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
@@ -28,13 +31,13 @@ jobs:
     needs: build
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Retrieve artifacts
+        uses: actions/download-artifact@v3
         with:
           path: dist
-      - uses: softprops/action-gh-release@v1
+      - name: Create new release
+        uses: softprops/action-gh-release@v1
         with:
           files: dist/*/*.tar.gz
-          draft: true
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
