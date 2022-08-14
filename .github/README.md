@@ -49,7 +49,7 @@ GET http://localhost:8080
 User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
 ```
 
-**NOTE**: Trailing comments are _NOT_ available.
+**NOTE**: Trailing comment is _NOT_ available.
 
 ---
 
@@ -66,6 +66,7 @@ climan -r 2 example.http
 ```
 
 Show response headers of the first request
+
 ```bash
 climan -v example.http
 ```
