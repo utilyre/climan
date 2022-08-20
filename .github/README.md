@@ -56,22 +56,22 @@ User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Fire
 
 ---
 
-Make the first request
+Make the first (and maybe the only) request of `example.http`
 
 ```bash
 climan example.http
 ```
 
-Make the second request
+Make the second request of `example.http`
 
 ```bash
 climan -r 2 example.http
 ```
 
-Show response headers of the first request
+Make the second request of `example.http` and output verbosely
 
 ```bash
-climan -v example.http
+climan -vr 2 example.http
 ```
 
 ## 🔖 Todos

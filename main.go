@@ -44,14 +44,13 @@ func main() {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode < 200 || res.StatusCode >= 300 {
-		log.Fatalln(res.Status)
-	}
-
 	if *verbose {
+		fmt.Println(res.Status)
+
 		for k, v := range res.Header {
 			fmt.Printf("%s: %s\n", k, v[0])
 		}
+
 		fmt.Println()
 	}
 
