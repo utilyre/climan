@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func Parse(filename string) ([]http.Request, error) {
+func Parse(filename string) ([]*http.Request, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func Parse(filename string) ([]http.Request, error) {
 	pieces := breakIntoPieces(lines)
 	pieces = removeEmptyLines(pieces)
 
-	reqs := []http.Request{}
+	reqs := []*http.Request{}
 
 	for i, lines := range pieces {
 		var method string
@@ -75,7 +75,7 @@ func Parse(filename string) ([]http.Request, error) {
 			req.Header.Set(k, v)
 		}
 
-		reqs = append(reqs, *req)
+		reqs = append(reqs, req)
 	}
 
 	return reqs, nil
