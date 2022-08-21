@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/droundy/goopt"
+	"github.com/fatih/color"
 	"github.com/utilyre/climan/httpparser"
 )
 
@@ -51,10 +52,26 @@ func main() {
 	defer res.Body.Close()
 
 	if *verbose {
-		fmt.Println(res.Status)
+		statusColor := color.New(color.Bold)
+		if res.StatusCode < 200 {
+			statusColor.Add(color.FgMagenta)
+		} else if res.StatusCode < 300 {
+			statusColor.Add(color.FgGreen)
+		} else if res.StatusCode < 400 {
+			statusColor.Add(color.FgBlue)
+		} else if res.StatusCode < 500 {
+			statusColor.Add(color.FgRed)
+		} else if res.StatusCode < 600 {
+			statusColor.Add(color.FgYellow)
+		}
+		statusColor.Println(res.Status)
 
+		fmt.Println()
+
+		keyColor := color.New(color.FgRed).SprintFunc()
+		valueColor := color.New(color.FgYellow).SprintFunc()
 		for key := range res.Header {
-			fmt.Printf("%s: %s\n", key, res.Header.Get(key))
+			fmt.Printf("%s: %s\n", keyColor(key), valueColor(res.Header.Get(key)))
 		}
 
 		fmt.Println()

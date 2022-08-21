@@ -105,7 +105,7 @@ climan -vr 2 example.http
 - [x] Support for other request body types (like `text/xml` and `text/plain`).
 - [x] Parse the response body base on `Content-Type` header.
 - [x] Show response details.
-- [ ] Colored output.
+- [x] Colored output.
 - [ ] Add more `http` examples.
 
 ## 📢 Credits
