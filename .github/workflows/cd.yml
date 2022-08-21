@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout version tag
         uses: actions/checkout@v3
-      - name: Set golang up
+      - name: Set up golang
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
