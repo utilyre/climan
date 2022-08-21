@@ -2,7 +2,6 @@ package httpparser
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -27,8 +26,8 @@ func Parse(filename string) ([]http.Request, error) {
 	for i, lines := range pieces {
 		var method string
 		var url string
-		var header = header{}
-		var body body
+		var header = map[string]string{}
+		var body string
 
 		hasHeaderEnded := false
 		for j, line := range lines {
@@ -63,19 +62,11 @@ func Parse(filename string) ([]http.Request, error) {
 				continue
 			}
 
-			err := json.Unmarshal([]byte(strings.Join(lines[j:], "\n")), &body)
-			if err != nil {
-				return nil, err
-			}
+			body = strings.Join(lines[j:], "\n")
 			break
 		}
 
-		buf, err := json.Marshal(body)
-		if err != nil {
-			return nil, err
-		}
-
-		req, err := http.NewRequest(method, url, bytes.NewBuffer(buf))
+		req, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
 		if err != nil {
 			return nil, err
 		}
