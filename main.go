@@ -54,24 +54,25 @@ func main() {
 		fmt.Println()
 	}
 
-	bufBody, err := ioutil.ReadAll(res.Body)
+	raw, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	strBody := bufBody
-	if contentType, ok := res.Header["Content-Type"]; ok && contentType[0] == "application/json" {
-		var body any
-		err = json.Unmarshal(bufBody, &body)
+	body := prettifyBody(raw, res.Header.Get("Content-Type"))
+	fmt.Println(body)
+}
+
+func prettifyBody(raw []byte, contentType string) string {
+	switch contentType {
+	case "application/json":
+		prettified, err := json.MarshalIndent(raw, "", "  ")
 		if err != nil {
-			log.Fatalln(err)
+			return string(raw)
 		}
 
-		strBody, err = json.MarshalIndent(body, "", "  ")
-		if err != nil {
-			log.Fatalln(err)
-		}
+		return string(prettified)
 	}
 
-	fmt.Println(string(strBody))
+	return string(raw)
 }
