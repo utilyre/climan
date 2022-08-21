@@ -14,7 +14,7 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ```bash
 tar -xzf climan-[OS]-[ARCH].tar.gz
-install -Dm755 climan "/usr/local/bin/climan"
+sudo install -Dm755 climan /usr/local/bin/climan
 ```
 
 ### Go Modules
