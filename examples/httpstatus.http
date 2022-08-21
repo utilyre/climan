@@ -1,0 +1,22 @@
+GET https://httpstat.us/101
+Accept: application/json
+
+###
+
+GET https://httpstat.us/200
+Accept: application/json
+
+###
+
+GET https://httpstat.us/308
+Accept: application/json
+
+###
+
+GET https://httpstat.us/404
+Accept: application/json
+
+###
+
+GET https://httpstat.us/503
+Accept: application/json
