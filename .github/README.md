@@ -4,9 +4,29 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
-- Download binary from github [releases](https://github.com/utilyre/climan/releases/latest)
+### GitHub Releases
 
-- Install via go modules
+1. Go to [latest](https://github.com/utilyre/climan/releases/latest).
+
+2. Download the appropriate `.tar.gz` file that suits your operating system and architecture.
+
+3. Extract and install the binary
+
+```bash
+tar -xzf climan-[OS]-[ARCH].tar.gz
+install -Dm755 climan "/usr/local/bin/climan"
+```
+
+### Go Modules
+
+1. Have golang setup on your system
+
+```bash
+export GOPATH="$XDG_DATA_HOME/go"
+export PATH="$PATH:$GOPATH/bin"
+```
+
+2. Install climan globally
 
 ```bash
 go install github.com/utilyre/climan@latest
