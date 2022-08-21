@@ -38,7 +38,13 @@ func main() {
 		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)+1))
 	}
 
-	res, err := http.DefaultClient.Do(reqs[*nth-1])
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	res, err := client.Do(reqs[*nth-1])
 	if err != nil {
 		log.Fatalln(err)
 	}
