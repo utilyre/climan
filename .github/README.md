@@ -106,6 +106,7 @@ climan -vr 2 example.http
 - [x] Parse the response body base on `Content-Type` header.
 - [x] Show response details.
 - [x] Colored output.
+- [ ] Colored response body.
 - [ ] Add more `http` examples.
 
 ## 📢 Credits
