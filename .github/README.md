@@ -10,12 +10,15 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 2. Download the appropriate `.tar.gz` archive that suits your operating system and architecture.
 
-3. Extract and install
+3. Extract the archive
 
 ```bash
 tar -xzf climan-[OS]-[ARCH].tar.gz
+```
 
-cd climan-[OS]-[ARCH]
+4. Install the included files (\*nix only)
+
+```bash
 sudo install -Dm755 bin/climan /usr/local/bin/climan
 ```
 
