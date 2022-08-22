@@ -31,7 +31,7 @@ func main() {
 	}
 
 	isVerbose := flag.Bool("verbose", false, "output verbosely")
-	index := flag.Int("index", 0, "determines which request to make")
+	index := flag.Int("index", 1, "determines which request to make")
 	flag.Parse()
 
 	if flag.Arg(0) == "" {
