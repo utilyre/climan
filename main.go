@@ -38,20 +38,20 @@ func main() {
 		log.Fatalln("missing file operand")
 	}
 
-	reqs, err := httpparser.Parse(flag.Arg(0))
+	requests, err := httpparser.Parse(flag.Arg(0))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if *index < -len(reqs) || *index > len(reqs) {
-		log.Fatalf("index must be greater than %d and less than %d\n", -len(reqs)-1, len(reqs)+1)
+	if *index < -len(requests) || *index > len(requests) {
+		log.Fatalf("index must be greater than %d and less than %d\n", -len(requests)-1, len(requests)+1)
 	}
 	if *index == 0 {
 		log.Fatalln("index can not be zero")
 	}
 
 	if *index < 0 {
-		*index = len(reqs) + 1 + *index
+		*index = len(requests) + 1 + *index
 	}
 
 	client := &http.Client{
@@ -60,44 +60,44 @@ func main() {
 		},
 	}
 
-	res, err := client.Do(reqs[*index-1])
+	response, err := client.Do(requests[*index-1])
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer res.Body.Close()
+	defer response.Body.Close()
 
 	if *isVerbose {
 		statusColor := color.New(color.Bold, color.Underline)
-		if res.StatusCode < 200 {
+		if response.StatusCode < 200 {
 			statusColor.Add(color.FgMagenta)
-		} else if res.StatusCode < 300 {
+		} else if response.StatusCode < 300 {
 			statusColor.Add(color.FgGreen)
-		} else if res.StatusCode < 400 {
+		} else if response.StatusCode < 400 {
 			statusColor.Add(color.FgBlue)
-		} else if res.StatusCode < 500 {
+		} else if response.StatusCode < 500 {
 			statusColor.Add(color.FgRed)
-		} else if res.StatusCode < 600 {
+		} else if response.StatusCode < 600 {
 			statusColor.Add(color.FgYellow)
 		}
-		fmt.Println(statusColor.Sprint(res.Status))
+		fmt.Println(statusColor.Sprint(response.Status))
 
 		fmt.Println()
 
 		keyColor := color.New(color.FgRed).SprintFunc()
 		valueColor := color.New(color.FgYellow).SprintFunc()
-		for key := range res.Header {
-			fmt.Printf("%s: %s\n", keyColor(key), valueColor(res.Header.Get(key)))
+		for key := range response.Header {
+			fmt.Printf("%s: %s\n", keyColor(key), valueColor(response.Header.Get(key)))
 		}
 
 		fmt.Println()
 	}
 
-	raw, err := ioutil.ReadAll(res.Body)
+	raw, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	body := prettifyBody(raw, res.Header.Get("Content-Type"))
+	body := prettifyBody(raw, response.Header.Get("Content-Type"))
 	fmt.Println(body)
 }
 

@@ -21,7 +21,7 @@ func Parse(filename string) ([]*http.Request, error) {
 	pieces := breakIntoPieces(lines)
 	pieces = removeEmptyLines(pieces)
 
-	reqs := []*http.Request{}
+	requests := []*http.Request{}
 
 	for i, lines := range pieces {
 		var method string
@@ -66,19 +66,19 @@ func Parse(filename string) ([]*http.Request, error) {
 			break
 		}
 
-		req, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
+		request, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
 		if err != nil {
 			return nil, err
 		}
 
-		for k, v := range header {
-			req.Header.Set(k, v)
+		for key, value := range header {
+			request.Header.Set(key, value)
 		}
 
-		reqs = append(reqs, req)
+		requests = append(requests, request)
 	}
 
-	return reqs, nil
+	return requests, nil
 }
 
 func trimSpace(lines []string) []string {
