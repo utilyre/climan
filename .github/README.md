@@ -107,6 +107,7 @@ climan -vr 2 example.http
 - [x] Show response details.
 - [x] Colored output.
 - [ ] Colored response body.
+- [ ] Environment variable support.
 - [ ] Add more `http` examples.
 
 ## 📢 Credits
