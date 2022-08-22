@@ -31,7 +31,7 @@ func main() {
 	}
 
 	isVerbose := flag.Bool("verbose", false, "output verbosely")
-	index := flag.Int("request", 1, "determines which request to make")
+	index := flag.Int("index", 0, "determines which request to make")
 	flag.Parse()
 
 	if flag.Arg(0) == "" {
@@ -43,11 +43,15 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if *index <= 0 {
-		log.Fatalln("n must be greater than 0")
+	if *index < -len(reqs) || *index > len(reqs) {
+		log.Fatalf("index must be greater than %d and less than %d\n", -len(reqs)-1, len(reqs)+1)
 	}
-	if *index > len(reqs) {
-		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)+1))
+	if *index == 0 {
+		log.Fatalln("index can not be zero")
+	}
+
+	if *index < 0 {
+		*index = len(reqs) + 1 + *index
 	}
 
 	client := &http.Client{
