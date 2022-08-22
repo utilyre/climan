@@ -52,7 +52,7 @@ func main() {
 	defer res.Body.Close()
 
 	if *verbose {
-		statusColor := color.New(color.Bold)
+		statusColor := color.New(color.Bold, color.Underline)
 		if res.StatusCode < 200 {
 			statusColor.Add(color.FgMagenta)
 		} else if res.StatusCode < 300 {
@@ -64,7 +64,7 @@ func main() {
 		} else if res.StatusCode < 600 {
 			statusColor.Add(color.FgYellow)
 		}
-		statusColor.Println(res.Status)
+		fmt.Println(statusColor.Sprint(res.Status))
 
 		fmt.Println()
 
