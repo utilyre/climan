@@ -2,12 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"github.com/droundy/goopt"
 	"github.com/fatih/color"
 	"github.com/utilyre/climan/httpparser"
 )
@@ -16,26 +16,37 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
-	goopt.Version = "0.0.0"
-	goopt.Summary = "climan [OPTIONS] -- <file>"
-	goopt.Description = func() string { return "A file based HTTP client" }
-	verbose := goopt.Flag([]string{"-v", "--verbose"}, []string{"-q", "--quiet"}, "output verbosely", "be quiet")
-	nth := goopt.Int([]string{"-r", "--request"}, 1, "determines which request to do")
+	flag.Usage = func() {
+		fmt.Println("climan - A file based HTTP client")
 
-	goopt.Parse(nil)
-	if len(goopt.Args) != 1 {
-		log.Fatalln("missing file")
+		fmt.Println()
+
+		fmt.Println("Usage:")
+		fmt.Println("  climan [OPTIONS]... -- FILE")
+
+		fmt.Println()
+
+		fmt.Println("Options:")
+		flag.PrintDefaults()
 	}
 
-	reqs, err := httpparser.Parse(goopt.Args[0])
+	isVerbose := flag.Bool("verbose", false, "output verbosely")
+	index := flag.Int("request", 1, "determines which request to make")
+	flag.Parse()
+
+	if flag.Arg(0) == "" {
+		log.Fatalln("missing file operand")
+	}
+
+	reqs, err := httpparser.Parse(flag.Arg(0))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if *nth <= 0 {
+	if *index <= 0 {
 		log.Fatalln("n must be greater than 0")
 	}
-	if *nth > len(reqs) {
+	if *index > len(reqs) {
 		log.Fatalln(fmt.Sprintf("n must be less than %d", len(reqs)+1))
 	}
 
@@ -45,13 +56,13 @@ func main() {
 		},
 	}
 
-	res, err := client.Do(reqs[*nth-1])
+	res, err := client.Do(reqs[*index-1])
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer res.Body.Close()
 
-	if *verbose {
+	if *isVerbose {
 		statusColor := color.New(color.Bold, color.Underline)
 		if res.StatusCode < 200 {
 			statusColor.Add(color.FgMagenta)

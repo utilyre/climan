@@ -1,5 +1,3 @@
-github.com/droundy/goopt v0.0.0-20220217183150-48d6390ad4d1 h1:6PKU05V7zJIJlTBq7AnEIrLVEUIYF4NjTU2a28Ho6ko=
-github.com/droundy/goopt v0.0.0-20220217183150-48d6390ad4d1/go.mod h1:ytRJ64WkuW4kf6/tuYqBATBCRFUP8X9+LDtgcvE+koI=
 github.com/fatih/color v1.13.0 h1:8LOYc1KYPPmyKMuN8QV2DNRWNbLo6LZ0iLs8+mlH53w=
 github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYFFOfk=
 github.com/mattn/go-colorable v0.1.9 h1:sqDoxXbdeALODt0DAeJCVp38ps9ZogZEAXjus69YV3U=
