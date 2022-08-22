@@ -67,7 +67,7 @@ POST http://localhost:8080
 Content-Type: application/json
 User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
 
-# Body (only json is supported for now)
+# Body
 {
   "title": "climan",
   "description": "A file based HTTP client"
