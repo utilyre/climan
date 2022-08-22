@@ -22,9 +22,11 @@ jobs:
       - name: Download dependencies
         run: go mod download
       - name: Compile source code
-        run: env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan
+        run: |
+          mkdir -p climan-${{ matrix.os }}-${{ matrix.arch }}/bin
+          env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ matrix.os }}-${{ matrix.arch }}/bin
       - name: Archive binary
-        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan
+        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
         uses: actions/upload-artifact@v3
         with:

@@ -6,15 +6,17 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ### GitHub Releases
 
-1. Go to [latest](https://github.com/utilyre/climan/releases/latest).
+1. Go to [latest](https://github.com/utilyre/climan/releases/latest) page.
 
-2. Download the appropriate `.tar.gz` file that suits your operating system and architecture.
+2. Download the appropriate `.tar.gz` archive that suits your operating system and architecture.
 
-3. Extract and install the binary
+3. Extract and install
 
 ```bash
 tar -xzf climan-[OS]-[ARCH].tar.gz
-sudo install -Dm755 climan /usr/local/bin/climan
+
+cd climan-[OS]-[ARCH]
+sudo install -Dm755 bin/climan /usr/local/bin/climan
 ```
 
 ### Go Modules
