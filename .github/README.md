@@ -4,9 +4,7 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
-- GitHub Releases
-
-  See [latest release](https://github.com/utilyre/climan/releases/latest).
+- [Latest Release](https://github.com/utilyre/climan/releases/latest)
 
 - Go Modules
 
