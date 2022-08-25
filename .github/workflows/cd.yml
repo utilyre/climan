@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir -p climan-${{ matrix.os }}-${{ matrix.arch }}/bin
           env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ matrix.os }}-${{ matrix.arch }}/bin
-      - name: Archive binary
+      - name: Archive files
         run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
         uses: actions/upload-artifact@v3
