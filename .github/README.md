@@ -4,46 +4,22 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
-### GitHub Releases
+- GitHub Releases
 
-1. Go to [latest](https://github.com/utilyre/climan/releases/latest) page.
+  See [latest release](https://github.com/utilyre/climan/releases/latest).
 
-2. Download the appropriate `.tar.gz` archive that suits your operating system and architecture.
+- Go Modules
 
-3. Extract the archive
-
-```bash
-tar -xzf climan-[OS]-[ARCH].tar.gz
-```
-
-4. Install the included files (\*nix only)
-
-```bash
-cd climan-[OS]-[ARCH]
-
-sudo install -Dm755 bin/climan /usr/local/bin/climan
-```
-
-### Go Modules
-
-1. Have golang setup on your system
-
-```bash
-export GOPATH="$XDG_DATA_HOME/go"
-export PATH="$PATH:$GOPATH/bin"
-```
-
-2. Install climan globally
-
-```bash
-go install github.com/utilyre/climan@latest
-```
+  ```bash
+  go install github.com/utilyre/climan@latest
+  ```
 
 ## 🌟 Integration
 
 ### Neovim
 
-Create a file at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following content
+Create a file at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following
+content
 
 ```lua
 -- ~/.config/nvim/ftdetect/http.lua

@@ -47,6 +47,75 @@ jobs:
       - name: Create new release
         uses: softprops/action-gh-release@v1
         with:
+          name: CLIMAN ${{ github.ref_name }}
+          body: |
+            ## 📦 Installation
+
+            Download an appropriate archive that suits your operating system
+            and architecture. Then follow the instructions of your operating
+            system below.
+
+            **NOTE**: Make sure to replace `[ARCH]` with your corresponding
+            architecture.
+
+            ### 🐧 Linux
+
+            1. Extract the downloaded archive.
+
+              for gzip
+
+              ```bash
+              tar -xzf climan-linux-[ARCH].tar.gz
+              ```
+
+              for zip
+
+              ```bash
+              unzip climan-linux-[ARCH].zip
+              ```
+
+            2. Install the included files
+
+              ```bash
+              cd climan-linux-[ARCH]
+              sudo install -Dm755 bin/climan /usr/local/bin/climan
+              ```
+
+            ### 🍎 MacOS
+
+              1. Extract the downloaded archive.
+
+              for gzip
+
+              ```bash
+              tar -xzf climan-darwin-[ARCH].tar.gz
+              ```
+
+              for zip
+
+              ```bash
+              unzip climan-darwin-[ARCH].zip
+              ```
+
+            2. Install the included files
+
+              ```bash
+              cd climan-darwin-[ARCH]
+              sudo install -Dm755 bin/climan /usr/local/bin/climan
+              ```
+
+            ### 🐌 Windows
+
+            1. Extract the downloaded archive.
+
+            2. Append `%USERPROFILE%\bin` to `Path` environment variable.
+
+            2. Install the included files
+
+              ```powershell
+              Set-Location -Path climan-windows-[ARCH]
+              Copy-Item -Path bin\climan -Destination %USERPROFILE%\bin\climan
+              ```
           files: |
             dist/*/*.tar.gz
             dist/*/*.zip
