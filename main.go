@@ -8,26 +8,34 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/fatih/color"
+	chalk "github.com/fatih/color"
 	"github.com/pborman/getopt/v2"
 	"github.com/utilyre/climan/httpparser"
 )
 
 var (
-	showHelp  *bool = getopt.BoolLong("help", 'h', "show help")
-	amVerbose *bool = getopt.BoolLong("verbose", 'v', "output verbosely")
-	index     *int  = getopt.IntLong("index", 'i', 1, "determines which request to make")
+	showHelp  *bool   = getopt.BoolLong("help", 'h', "show help")
+	amVerbose *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
+	color     *string = getopt.StringLong("color", 0, "auto", "determine when to use escape sequences", "WHEN")
+	index     *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
 )
 
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
-	getopt.SetParameters("file")
+	getopt.SetParameters("FILE")
 	getopt.Parse()
 	if *showHelp {
 		getopt.PrintUsage(os.Stdout)
 		os.Exit(0)
+	}
+
+	switch *color {
+	case "never":
+		chalk.NoColor = true
+	case "always":
+		chalk.NoColor = false
 	}
 
 	filename := getopt.Arg(0)
@@ -66,24 +74,24 @@ func main() {
 	defer response.Body.Close()
 
 	if *amVerbose {
-		statusColor := color.New(color.Bold, color.Underline)
+		statusColor := chalk.New(chalk.Bold, chalk.Underline)
 		if response.StatusCode < 200 {
-			statusColor.Add(color.FgMagenta)
+			statusColor.Add(chalk.FgMagenta)
 		} else if response.StatusCode < 300 {
-			statusColor.Add(color.FgGreen)
+			statusColor.Add(chalk.FgGreen)
 		} else if response.StatusCode < 400 {
-			statusColor.Add(color.FgBlue)
+			statusColor.Add(chalk.FgBlue)
 		} else if response.StatusCode < 500 {
-			statusColor.Add(color.FgRed)
+			statusColor.Add(chalk.FgRed)
 		} else if response.StatusCode < 600 {
-			statusColor.Add(color.FgYellow)
+			statusColor.Add(chalk.FgYellow)
 		}
 		fmt.Println(statusColor.Sprint(response.Status))
 
 		fmt.Println()
 
-		keyColor := color.New(color.FgRed).SprintFunc()
-		valueColor := color.New(color.FgYellow).SprintFunc()
+		keyColor := chalk.New(chalk.FgRed).SprintFunc()
+		valueColor := chalk.New(chalk.FgYellow).SprintFunc()
 		for key := range response.Header {
 			fmt.Printf("%s: %s\n", keyColor(key), valueColor(response.Header.Get(key)))
 		}
