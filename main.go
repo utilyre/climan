@@ -2,43 +2,39 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/fatih/color"
+	"github.com/pborman/getopt/v2"
 	"github.com/utilyre/climan/httpparser"
+)
+
+var (
+	showHelp  *bool = getopt.BoolLong("help", 'h', "show help")
+	amVerbose *bool = getopt.BoolLong("verbose", 'v', "output verbosely")
+	index     *int  = getopt.IntLong("index", 'i', 1, "determines which request to make")
 )
 
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
-	flag.Usage = func() {
-		fmt.Println("climan - A file based HTTP client")
-
-		fmt.Println()
-
-		fmt.Println("Usage:")
-		fmt.Println("  climan [OPTIONS]... -- FILE")
-
-		fmt.Println()
-
-		fmt.Println("Options:")
-		flag.PrintDefaults()
+	getopt.Parse()
+	if *showHelp {
+		getopt.PrintUsage(os.Stdout)
+		os.Exit(0)
 	}
 
-	isVerbose := flag.Bool("verbose", false, "output verbosely")
-	index := flag.Int("index", 1, "determines which request to make")
-	flag.Parse()
-
-	if flag.Arg(0) == "" {
+	filename := getopt.Arg(0)
+	if filename == "" {
 		log.Fatalln("missing file operand")
 	}
 
-	requests, err := httpparser.Parse(flag.Arg(0))
+	requests, err := httpparser.Parse(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -66,7 +62,7 @@ func main() {
 	}
 	defer response.Body.Close()
 
-	if *isVerbose {
+	if *amVerbose {
 		statusColor := color.New(color.Bold, color.Underline)
 		if response.StatusCode < 200 {
 			statusColor.Add(color.FgMagenta)
