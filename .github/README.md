@@ -8,9 +8,9 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 - Go Modules
 
-  ```bash
-  go install github.com/utilyre/climan@latest
-  ```
+   ```bash
+   go install github.com/utilyre/climan@latest
+   ```
 
 ## 🌟 Integration
 

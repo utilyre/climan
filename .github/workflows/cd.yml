@@ -62,47 +62,47 @@ jobs:
 
             1. Extract the downloaded archive.
 
-              for gzip
+               for gzip
 
-              ```bash
-              tar -xzf climan-linux-[ARCH].tar.gz
-              ```
+               ```bash
+               tar -xzf climan-linux-[ARCH].tar.gz
+               ```
 
-              for zip
+               for zip
 
-              ```bash
-              unzip climan-linux-[ARCH].zip
-              ```
+               ```bash
+               unzip climan-linux-[ARCH].zip
+               ```
 
             2. Install the included files
 
-              ```bash
-              cd climan-linux-[ARCH]
-              sudo install -Dm755 bin/climan /usr/local/bin/climan
-              ```
+               ```bash
+               cd climan-linux-[ARCH]
+               sudo install -Dm755 bin/climan /usr/local/bin/climan
+               ```
 
             ### 🍎 MacOS
 
-              1. Extract the downloaded archive.
+            1. Extract the downloaded archive.
 
-              for gzip
+               for gzip
 
-              ```bash
-              tar -xzf climan-darwin-[ARCH].tar.gz
-              ```
+               ```bash
+               tar -xzf climan-darwin-[ARCH].tar.gz
+               ```
 
-              for zip
+               for zip
 
-              ```bash
-              unzip climan-darwin-[ARCH].zip
-              ```
+               ```bash
+               unzip climan-darwin-[ARCH].zip
+               ```
 
             2. Install the included files
 
-              ```bash
-              cd climan-darwin-[ARCH]
-              sudo install -Dm755 bin/climan /usr/local/bin/climan
-              ```
+               ```bash
+               cd climan-darwin-[ARCH]
+               sudo install -Dm755 bin/climan /usr/local/bin/climan
+               ```
 
             ### 🐌 Windows
 
@@ -110,12 +110,12 @@ jobs:
 
             2. Append `%USERPROFILE%\bin` to `Path` environment variable.
 
-            2. Install the included files
+            3. Install the included files
 
-              ```powershell
-              Set-Location -Path climan-windows-[ARCH]
-              Copy-Item -Path bin\climan -Destination %USERPROFILE%\bin\climan
-              ```
+               ```powershell
+               Set-Location -Path climan-windows-[ARCH]
+               Copy-Item -Path bin\climan -Destination %USERPROFILE%\bin\climan
+               ```
           files: |
             dist/*/*.tar.gz
             dist/*/*.zip
