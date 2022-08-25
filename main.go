@@ -23,6 +23,7 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
+	getopt.SetParameters("file")
 	getopt.Parse()
 	if *showHelp {
 		getopt.PrintUsage(os.Stdout)
@@ -32,6 +33,8 @@ func main() {
 	filename := getopt.Arg(0)
 	if filename == "" {
 		log.Fatalln("missing file operand")
+	} else if len(getopt.Args()) > 1 {
+		log.Fatalln("too many files")
 	}
 
 	requests, err := httpparser.Parse(filename)
