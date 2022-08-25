@@ -50,13 +50,11 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if *index < -len(requests) || *index > len(requests) {
-		log.Fatalf("index must be greater than %d and less than %d\n", -len(requests)-1, len(requests)+1)
-	}
 	if *index == 0 {
 		log.Fatalln("index can not be zero")
+	} else if *index < -len(requests) || *index > len(requests) {
+		log.Fatalf("index must be greater than %d and less than %d\n", -len(requests)-1, len(requests)+1)
 	}
-
 	if *index < 0 {
 		*index = len(requests) + 1 + *index
 	}

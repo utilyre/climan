@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+const (
+	RequestSeparator string = "###"
+)
+
 func Parse(filename string) ([]*http.Request, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -24,10 +28,10 @@ func Parse(filename string) ([]*http.Request, error) {
 	requests := []*http.Request{}
 
 	for i, lines := range pieces {
-		var method string
-		var url string
-		var header = map[string]string{}
-		var body string
+		method := ""
+		url := ""
+		header := map[string]string{}
+		body := ""
 
 		hasHeaderEnded := false
 		for j, line := range lines {
@@ -95,7 +99,7 @@ func removeComments(lines []string) []string {
 		if line == "" {
 			continue
 		}
-		if string(line[0]) != "#" || line == "###" {
+		if string(line[0]) != "#" || line == RequestSeparator {
 			continue
 		}
 
@@ -110,7 +114,7 @@ func breakIntoPieces(lines []string) [][]string {
 
 	start := 0
 	for i, line := range lines {
-		if line != "###" {
+		if line != RequestSeparator {
 			continue
 		}
 
