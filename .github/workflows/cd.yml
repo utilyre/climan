@@ -26,12 +26,16 @@ jobs:
           mkdir -p climan-${{ matrix.os }}-${{ matrix.arch }}/bin
           env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ matrix.os }}-${{ matrix.arch }}/bin
       - name: Archive files
-        run: tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ matrix.os }}-${{ matrix.arch }}
+        run: |
+          tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ matrix.os }}-${{ matrix.arch }}
+          zip -r climan-${{ matrix.os }}-${{ matrix.arch }}.zip climan-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
-          path: climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+          path: |
+            climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+            climan-${{ matrix.os }}-${{ matrix.arch }}.zip
   release:
     needs: build
     runs-on: ubuntu-22.04
@@ -43,6 +47,8 @@ jobs:
       - name: Create new release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*/*.tar.gz
+          files: |
+            dist/*/*.tar.gz
+            dist/*/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
