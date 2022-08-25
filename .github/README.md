@@ -37,7 +37,7 @@ export PATH="$PATH:$GOPATH/bin"
 go install github.com/utilyre/climan@latest
 ```
 
-## 🌠 Integration
+## 🌟 Integration
 
 ### Neovim
 
