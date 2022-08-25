@@ -18,9 +18,29 @@ var (
 	amVerbose *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
 	color     *string = getopt.StringLong("color", 0, "auto", "determine when to use escape sequences", "WHEN")
 	index     *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
+
+	filename string = ""
 )
 
 func main() {
+	setupCLI()
+
+	request := getRequest()
+	response := sendRequest(request)
+	defer response.Body.Close()
+
+	if *amVerbose {
+		printStatus(response)
+		fmt.Println()
+
+		printHeader(response)
+		fmt.Println()
+	}
+
+	printBody(response)
+}
+
+func setupCLI() {
 	log.SetFlags(0)
 	log.SetPrefix("climan: ")
 
@@ -38,13 +58,15 @@ func main() {
 		chalk.NoColor = false
 	}
 
-	filename := getopt.Arg(0)
+	filename = getopt.Arg(0)
 	if filename == "" {
 		log.Fatalln("missing file operand")
 	} else if len(getopt.Args()) > 1 {
 		log.Fatalln("too many files")
 	}
+}
 
+func getRequest() *http.Request {
 	requests, err := httpparser.Parse(filename)
 	if err != nil {
 		log.Fatalln(err)
@@ -59,63 +81,63 @@ func main() {
 		*index = len(requests) + 1 + *index
 	}
 
+	return requests[*index-1]
+}
+
+func sendRequest(request *http.Request) *http.Response {
 	client := &http.Client{
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+		CheckRedirect: func(request *http.Request, requests []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
 	}
 
-	response, err := client.Do(requests[*index-1])
+	response, err := client.Do(request)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer response.Body.Close()
 
-	if *amVerbose {
-		statusColor := chalk.New(chalk.Bold, chalk.Underline)
-		if response.StatusCode < 200 {
-			statusColor.Add(chalk.FgMagenta)
-		} else if response.StatusCode < 300 {
-			statusColor.Add(chalk.FgGreen)
-		} else if response.StatusCode < 400 {
-			statusColor.Add(chalk.FgBlue)
-		} else if response.StatusCode < 500 {
-			statusColor.Add(chalk.FgRed)
-		} else if response.StatusCode < 600 {
-			statusColor.Add(chalk.FgYellow)
-		}
-		fmt.Println(statusColor.Sprint(response.Status))
+	return response
+}
 
-		fmt.Println()
-
-		keyColor := chalk.New(chalk.FgRed).SprintFunc()
-		valueColor := chalk.New(chalk.FgYellow).SprintFunc()
-		for key := range response.Header {
-			fmt.Printf("%s: %s\n", keyColor(key), valueColor(response.Header.Get(key)))
-		}
-
-		fmt.Println()
+func printStatus(response *http.Response) {
+	statusColor := chalk.New(chalk.Bold, chalk.Underline)
+	if response.StatusCode < 200 {
+		statusColor.Add(chalk.FgMagenta)
+	} else if response.StatusCode < 300 {
+		statusColor.Add(chalk.FgGreen)
+	} else if response.StatusCode < 400 {
+		statusColor.Add(chalk.FgBlue)
+	} else if response.StatusCode < 500 {
+		statusColor.Add(chalk.FgRed)
+	} else if response.StatusCode < 600 {
+		statusColor.Add(chalk.FgYellow)
 	}
 
+	fmt.Println(statusColor.Sprint(response.Status))
+}
+
+func printHeader(response *http.Response) {
+	keyColor := chalk.New(chalk.FgRed)
+	valueColor := chalk.New(chalk.FgYellow)
+
+	for key := range response.Header {
+		fmt.Printf("%s: %s\n", keyColor.Sprint(key), valueColor.Sprint(response.Header.Get(key)))
+	}
+}
+
+func printBody(response *http.Response) {
 	raw, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	body := prettifyBody(raw, response.Header.Get("Content-Type"))
-	fmt.Println(body)
-}
-
-func prettifyBody(raw []byte, contentType string) string {
-	switch contentType {
+	switch response.Header.Get("Content-Type") {
 	case "application/json":
-		prettified, err := json.MarshalIndent(raw, "", "  ")
-		if err != nil {
-			return string(raw)
+		if prettified, err := json.MarshalIndent(raw, "", "  "); err == nil {
+			fmt.Println(string(prettified))
+			return
 		}
-
-		return string(prettified)
 	}
 
-	return string(raw)
+	fmt.Println(string(raw))
 }
