@@ -19,6 +19,8 @@ tar -xzf climan-[OS]-[ARCH].tar.gz
 4. Install the included files (\*nix only)
 
 ```bash
+cd climan-[OS]-[ARCH]
+
 sudo install -Dm755 bin/climan /usr/local/bin/climan
 ```
 
