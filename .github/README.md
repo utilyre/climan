@@ -4,7 +4,7 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
-- [Latest Release](https://github.com/utilyre/climan/releases/latest)
+- [Latest Release](https://github.com/utilyre/climan/releases/latest).
 
 - Go Modules
 
@@ -16,8 +16,8 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 ### Neovim
 
-Create a file at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following
-content
+In order to get syntax highlighting with nvim-treesitter plugin create a file
+at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following content
 
 ```lua
 -- ~/.config/nvim/ftdetect/http.lua
