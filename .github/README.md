@@ -98,19 +98,25 @@ climan example.http
 Make the second request of `example.http`
 
 ```bash
-climan -index 2 example.http
+climan -i 2 example.http
 ```
 
 Make the last request of `example.http`
 
 ```bash
-climan -index -1 example.http
+climan -i -1 example.http
 ```
 
 Make the second request of `example.http` and output verbosely
 
 ```bash
-climan -verbose -index 2 example.http
+climan -vi 2 example.http
+```
+
+Show help
+
+```bash
+climan -h
 ```
 
 ## 🔖 Todos
