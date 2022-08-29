@@ -114,7 +114,7 @@ jobs:
 
                ```powershell
                Set-Location -Path climan-windows-[ARCH]
-               Copy-Item -Path bin\climan -Destination %USERPROFILE%\bin\climan
+               Copy-Item -Path bin\climan.exe -Destination %USERPROFILE%\bin\climan.exe
                ```
           files: |
             dist/*/*.tar.gz
