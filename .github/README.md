@@ -1,4 +1,4 @@
-# ✨ CLI Man
+# 📝 CLI Man
 
 Make http requests from command line **BLAZINGLY FASTER**!
 
