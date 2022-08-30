@@ -17,6 +17,7 @@ import (
 var (
 	showHelp  *bool   = getopt.BoolLong("help", 'h', "show help")
 	amVerbose *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
+	amRaw     *bool   = getopt.BoolLong("raw", 'r', "do not try to parse response body")
 	color     *string = getopt.StringLong("color", 0, "auto", "determine when to use escape sequences", "WHEN")
 	index     *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
 
@@ -132,14 +133,21 @@ func printBody(response *http.Response) {
 		log.Fatalln(err)
 	}
 
+	if *amRaw {
+		goto resort
+	}
+
 	switch response.Header.Get("Content-Type") {
 	case "application/json":
 		var prettified bytes.Buffer
-		if err = json.Indent(&prettified, raw, "", "\t"); err == nil {
-			fmt.Println(string(prettified.Bytes()))
-			return
+		if err = json.Indent(&prettified, raw, "", "\t"); err != nil {
+			goto resort
 		}
+
+		fmt.Println(string(prettified.Bytes()))
+		return
 	}
 
+resort:
 	fmt.Println(string(raw))
 }
