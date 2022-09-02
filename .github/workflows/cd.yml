@@ -44,23 +44,41 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: dist
+      - name: Move archives to cwd
+        run: |
+          mv dist/*/*.tar.gz dist/*/*.zip .
+          rm -r dist
+      - name: Compute checksums
+        run: sha256sum *.tar.gz *.zip > sha256sums.txt
       - name: Create new release
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: CLIMAN ${{ github.ref_name }}
           body: |
             ## 📦 Installation
 
-            Download an appropriate archive that suits your operating system
-            and architecture. Then follow the instructions of your operating
-            system below.
+            Download `sha256sums.txt` as well as an appropriate archive that
+            suits your operating system and architecture. Then follow the
+            instructions of your operating system below.
 
             **NOTE**: Make sure to replace `[ARCH]` with your corresponding
             architecture.
 
             ### 🐧 Linux
 
-            1. Extract the downloaded archive.
+            1. Verify checksums
+
+               ```bash
+               sha256sum -c sha256sums.txt
+               ```
+
+               **NOTICE**: You might see `No such file or directory` warning
+               which is fine as long as there is an `OK` in front of the
+               archive you've downloaded.
+
+            2. Extract the downloaded archive.
 
                for gzip
 
@@ -74,7 +92,7 @@ jobs:
                unzip climan-linux-[ARCH].zip
                ```
 
-            2. Install the included files
+            3. Install the included files
 
                ```bash
                cd climan-linux-[ARCH]
@@ -83,7 +101,17 @@ jobs:
 
             ### 🍎 MacOS
 
-            1. Extract the downloaded archive.
+            1. Verify checksums
+
+               ```bash
+               sha256sum -c sha256sums.txt
+               ```
+
+               **NOTICE**: You might see `No such file or directory` warning
+               which is fine as long as there is an `OK` in front of the
+               archive you've downloaded.
+
+            2. Extract the downloaded archive.
 
                for gzip
 
@@ -97,7 +125,7 @@ jobs:
                unzip climan-darwin-[ARCH].zip
                ```
 
-            2. Install the included files
+            3. Install the included files
 
                ```bash
                cd climan-darwin-[ARCH]
@@ -106,18 +134,34 @@ jobs:
 
             ### 🐌 Windows
 
-            1. Extract the downloaded archive.
+            1. Verify checksums.
 
-            2. Append `%USERPROFILE%\bin` to `Path` environment variable.
+               for gzip
 
-            3. Install the included files
+               ```powershell
+               Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].tar.gz
+               ```
+
+               for zip
+
+               ```powershell
+               Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].zip
+               ```
+
+               Now check if output of the previous command matches the
+               corresponding line of `sha256sums.txt`.
+
+            2. Extract the downloaded archive.
+
+            3. Append `%USERPROFILE%\bin` to `Path` environment variable.
+
+            4. Install the included files
 
                ```powershell
                Set-Location -Path climan-windows-[ARCH]
                Copy-Item -Path bin\climan.exe -Destination %USERPROFILE%\bin\climan.exe
                ```
           files: |
-            dist/*/*.tar.gz
-            dist/*/*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            *.tar.gz
+            *.zip
+            sha256sums.txt
