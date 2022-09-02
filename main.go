@@ -14,12 +14,15 @@ import (
 	"github.com/utilyre/climan/httpparser"
 )
 
+const VERSION string = "0.0.0"
+
 var (
-	showHelp  *bool   = getopt.BoolLong("help", 'h', "show help")
-	amVerbose *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
-	amRaw     *bool   = getopt.BoolLong("raw", 'r', "do not try to parse response body")
-	color     *string = getopt.StringLong("color", 0, "auto", "determine when to use escape sequences", "WHEN")
-	index     *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
+	showHelp    *bool   = getopt.BoolLong("help", 'h', "show help")
+	showVersion *bool   = getopt.BoolLong("version", 'V', "show version")
+	amVerbose   *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
+	amRaw       *bool   = getopt.BoolLong("raw", 'r', "do not try to parse response body")
+	color       *string = getopt.StringLong("color", 0, "auto", "determine when to use escape sequences", "WHEN")
+	index       *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
 
 	filename string = ""
 )
@@ -48,8 +51,13 @@ func setupCLI() {
 
 	getopt.SetParameters("FILE")
 	getopt.Parse()
+
 	if *showHelp {
 		getopt.PrintUsage(os.Stdout)
+		os.Exit(0)
+	}
+	if *showVersion {
+		fmt.Println(VERSION)
 		os.Exit(0)
 	}
 
