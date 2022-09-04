@@ -14,7 +14,7 @@ import (
 	"github.com/utilyre/climan/httpparser"
 )
 
-const VERSION string = "0.0.0"
+const version string = "0.0.0"
 
 var (
 	showHelp    *bool   = getopt.BoolLong("help", 'h', "show help")
@@ -57,7 +57,7 @@ func setupCLI() {
 		os.Exit(0)
 	}
 	if *showVersion {
-		fmt.Println(VERSION)
+		fmt.Println(version)
 		os.Exit(0)
 	}
 
