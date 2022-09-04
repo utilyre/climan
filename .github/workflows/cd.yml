@@ -80,13 +80,13 @@ jobs:
 
             2. Extract the downloaded archive.
 
-               for gzip
+               - Gzip
 
                ```bash
                tar -xzf climan-linux-[ARCH].tar.gz
                ```
 
-               for zip
+               - Zip
 
                ```bash
                unzip climan-linux-[ARCH].zip
@@ -113,13 +113,13 @@ jobs:
 
             2. Extract the downloaded archive.
 
-               for gzip
+               - Gzip
 
                ```bash
                tar -xzf climan-darwin-[ARCH].tar.gz
                ```
 
-               for zip
+               - Zip
 
                ```bash
                unzip climan-darwin-[ARCH].zip
@@ -136,13 +136,13 @@ jobs:
 
             1. Verify checksums.
 
-               for gzip
+               - Gzip
 
                ```powershell
                Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].tar.gz
                ```
 
-               for zip
+               - Zip
 
                ```powershell
                Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].zip
