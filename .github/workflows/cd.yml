@@ -23,19 +23,19 @@ jobs:
         run: go mod download
       - name: Compile source code
         run: |
-          mkdir -p climan-${{ matrix.os }}-${{ matrix.arch }}/bin
-          env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ matrix.os }}-${{ matrix.arch }}/bin
+          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+          env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
       - name: Archive files
         run: |
-          tar -czf climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ matrix.os }}-${{ matrix.arch }}
-          zip -r climan-${{ matrix.os }}-${{ matrix.arch }}.zip climan-${{ matrix.os }}-${{ matrix.arch }}
+          tar -czf climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
+          zip -r climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.zip climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
           path: |
-            climan-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
-            climan-${{ matrix.os }}-${{ matrix.arch }}.zip
+            climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+            climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.zip
   release:
     needs: build
     runs-on: ubuntu-22.04
@@ -74,7 +74,7 @@ jobs:
                sha256sum -c sha256sums.txt
                ```
 
-               **NOTICE**: You might see `No such file or directory` warning
+               **NOTICE**: You might see `No such file or directory` warnings
                which is fine as long as there is an `OK` in front of the
                archive you've downloaded.
 
@@ -83,19 +83,19 @@ jobs:
                - Gzip
 
                ```bash
-               tar -xzf climan-linux-[ARCH].tar.gz
+               tar -xzf climan-${{ github.ref_name }}-linux-[ARCH].tar.gz
                ```
 
                - Zip
 
                ```bash
-               unzip climan-linux-[ARCH].zip
+               unzip climan-${{ github.ref_name }}-linux-[ARCH].zip
                ```
 
             3. Install the included files
 
                ```bash
-               cd climan-linux-[ARCH]
+               cd climan-${{ github.ref_name }}-linux-[ARCH]
                sudo install -Dm755 bin/climan /usr/local/bin/climan
                ```
 
@@ -107,7 +107,7 @@ jobs:
                sha256sum -c sha256sums.txt
                ```
 
-               **NOTICE**: You might see `No such file or directory` warning
+               **NOTICE**: You might see `No such file or directory` warnings
                which is fine as long as there is an `OK` in front of the
                archive you've downloaded.
 
@@ -116,19 +116,19 @@ jobs:
                - Gzip
 
                ```bash
-               tar -xzf climan-darwin-[ARCH].tar.gz
+               tar -xzf climan-${{ github.ref_name }}-darwin-[ARCH].tar.gz
                ```
 
                - Zip
 
                ```bash
-               unzip climan-darwin-[ARCH].zip
+               unzip climan-${{ github.ref_name }}-darwin-[ARCH].zip
                ```
 
             3. Install the included files
 
                ```bash
-               cd climan-darwin-[ARCH]
+               cd climan-${{ github.ref_name }}-darwin-[ARCH]
                sudo install -Dm755 bin/climan /usr/local/bin/climan
                ```
 
@@ -139,13 +139,13 @@ jobs:
                - Gzip
 
                ```powershell
-               Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].tar.gz
+               Get-FileHash -Algorithm SHA256 -Path climan-${{ github.ref_name }}-windows-[ARCH].tar.gz
                ```
 
                - Zip
 
                ```powershell
-               Get-FileHash -Algorithm SHA256 -Path climan-windows-[ARCH].zip
+               Get-FileHash -Algorithm SHA256 -Path climan-${{ github.ref_name }}-windows-[ARCH].zip
                ```
 
                Now check if output of the previous command matches the
@@ -158,7 +158,7 @@ jobs:
             4. Install the included files
 
                ```powershell
-               Set-Location -Path climan-windows-[ARCH]
+               Set-Location -Path climan-${{ github.ref_name }}-windows-[ARCH]
                Copy-Item -Path bin\climan.exe -Destination %USERPROFILE%\bin\climan.exe
                ```
           files: |
