@@ -36,8 +36,6 @@ func main() {
 
 	if *amVerbose {
 		printStatus(response)
-		fmt.Println()
-
 		printHeader(response)
 		fmt.Println()
 	}
@@ -110,20 +108,22 @@ func sendRequest(request *http.Request) *http.Response {
 }
 
 func printStatus(response *http.Response) {
-	statusColor := chalk.New(chalk.Bold, chalk.Underline)
+	protoColor := chalk.New(chalk.Bold, chalk.FgBlue)
+
+	statusColor := chalk.New(chalk.Bold)
 	if response.StatusCode < 200 {
 		statusColor.Add(chalk.FgMagenta)
 	} else if response.StatusCode < 300 {
 		statusColor.Add(chalk.FgGreen)
 	} else if response.StatusCode < 400 {
-		statusColor.Add(chalk.FgBlue)
+		statusColor.Add(chalk.FgCyan)
 	} else if response.StatusCode < 500 {
 		statusColor.Add(chalk.FgRed)
 	} else if response.StatusCode < 600 {
 		statusColor.Add(chalk.FgYellow)
 	}
 
-	fmt.Println(statusColor.Sprint(response.Status))
+	fmt.Printf("%s %s\n", protoColor.Sprint(response.Proto), statusColor.Sprint(response.Status))
 }
 
 func printHeader(response *http.Response) {
