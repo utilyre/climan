@@ -128,7 +128,7 @@ jobs:
                sudo install -Dm755 bin/climan /usr/local/bin/climan
                ```
 
-            ### 🐌 Windows
+            ### 🪟 Windows
 
             1. Verify checksums.
 
