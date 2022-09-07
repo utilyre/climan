@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	chalk "github.com/fatih/color"
 	"github.com/pborman/getopt/v2"
@@ -23,6 +24,7 @@ var (
 	amRaw       *bool   = getopt.BoolLong("raw", 'r', "do not format response body")
 	color       *string = getopt.StringLong("color", 0, "auto", "whether to use escape sequences (auto, never, always)", "WHEN")
 	index       *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
+	timeout     *int    = getopt.IntLong("timeout", 't', 0, "set maximum time for request to take in milliseconds", "NUM")
 
 	filename string = ""
 )
@@ -94,6 +96,7 @@ func getRequest() *http.Request {
 
 func sendRequest(request *http.Request) *http.Response {
 	client := &http.Client{
+		Timeout: time.Duration(*timeout) * time.Millisecond,
 		CheckRedirect: func(request *http.Request, requests []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
