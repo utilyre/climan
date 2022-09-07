@@ -71,12 +71,8 @@ jobs:
             1. Verify checksums
 
                ```bash
-               sha256sum -c sha256sums.txt
+               sha256sum --ignore-missing -c sha256sums.txt
                ```
-
-               **NOTICE**: You might see `No such file or directory` warnings
-               which is fine as long as there is an `OK` in front of the
-               archive you've downloaded.
 
             2. Extract the downloaded archive.
 
