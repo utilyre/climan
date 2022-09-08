@@ -9,9 +9,7 @@ import (
 	"strings"
 )
 
-const (
-	RequestSeparator string = "###"
-)
+const RequestSeparator string = "###"
 
 func Parse(filename string) ([]*http.Request, error) {
 	content, err := ioutil.ReadFile(filename)
