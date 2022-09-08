@@ -62,10 +62,13 @@ func setupCLI() {
 	}
 
 	switch *color {
+	case "auto":
 	case "never":
 		chalk.NoColor = true
 	case "always":
 		chalk.NoColor = false
+	default:
+		log.Fatalf("invalid color '%s'\n", *color)
 	}
 
 	filename = getopt.Arg(0)
