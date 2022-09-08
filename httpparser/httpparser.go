@@ -36,10 +36,10 @@ func Parse(filename string) ([]*http.Request, error) {
 			if j == 0 {
 				parts := strings.Split(line, " ")
 				if len(parts) != 2 {
-					return nil, errors.New(fmt.Sprintf("expected a http method followed by a url separated by one space in the #%d request", i+1))
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method followed by a url separated by one space in the #%d request", i+1))
 				}
 				if !isValidMethod(parts[0]) {
-					return nil, errors.New(fmt.Sprintf("expected a http method instead of `%s` in the #%d request", parts[0], i+1))
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method instead of `%s` in the #%d request", parts[0], i+1))
 				}
 
 				method = parts[0]
@@ -54,7 +54,7 @@ func Parse(filename string) ([]*http.Request, error) {
 
 				parts := strings.SplitN(line, ": ", 2)
 				if len(parts) < 2 {
-					return nil, errors.New(fmt.Sprintf("expected a key follows by a value in header of #%d request", i+i))
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a key follows by a value in header of #%d request", i+i))
 				}
 
 				header[parts[0]] = parts[1]
