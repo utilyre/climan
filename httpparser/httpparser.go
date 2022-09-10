@@ -23,63 +23,7 @@ func Parse(filename string) ([]*http.Request, error) {
 	pieces := breakIntoPieces(lines)
 	pieces = removeEmptyLines(pieces)
 
-	requests := []*http.Request{}
-
-	for i, lines := range pieces {
-		method := ""
-		url := ""
-		header := map[string]string{}
-		body := ""
-
-		hasHeaderEnded := false
-		for j, line := range lines {
-			if j == 0 {
-				parts := strings.Split(line, " ")
-				if len(parts) != 2 {
-					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method followed by a url separated by one space in the #%d request", i+1))
-				}
-				if !isValidMethod(parts[0]) {
-					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method instead of `%s` in the #%d request", parts[0], i+1))
-				}
-
-				method = parts[0]
-				url = parts[1]
-				continue
-			}
-			if !hasHeaderEnded {
-				if line == "" {
-					hasHeaderEnded = true
-					continue
-				}
-
-				parts := strings.SplitN(line, ": ", 2)
-				if len(parts) < 2 {
-					return nil, errors.New(fmt.Sprintf("httpparser: expected a key follows by a value in header of #%d request", i+i))
-				}
-
-				header[parts[0]] = parts[1]
-				continue
-			}
-			if line == "" {
-				continue
-			}
-
-			body = strings.Join(lines[j:], "\n")
-			break
-		}
-
-		request, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
-		if err != nil {
-			return nil, err
-		}
-
-		for key, value := range header {
-			request.Header.Set(key, value)
-		}
-
-		requests = append(requests, request)
-	}
-
+	requests, err := extractRequests(pieces)
 	return requests, nil
 }
 
@@ -151,6 +95,67 @@ func removeEmptyLines(pieces [][]string) [][]string {
 	}
 
 	return pieces
+}
+
+func extractRequests(pieces [][]string) ([]*http.Request, error) {
+	requests := []*http.Request{}
+
+	for i, lines := range pieces {
+		method := ""
+		url := ""
+		header := map[string]string{}
+		body := ""
+
+		hasHeaderEnded := false
+		for j, line := range lines {
+			if j == 0 {
+				parts := strings.Split(line, " ")
+				if len(parts) != 2 {
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method followed by a url separated by one space in the #%d request", i+1))
+				}
+				if !isValidMethod(parts[0]) {
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a http method instead of `%s` in the #%d request", parts[0], i+1))
+				}
+
+				method = parts[0]
+				url = parts[1]
+				continue
+			}
+			if !hasHeaderEnded {
+				if line == "" {
+					hasHeaderEnded = true
+					continue
+				}
+
+				parts := strings.SplitN(line, ": ", 2)
+				if len(parts) < 2 {
+					return nil, errors.New(fmt.Sprintf("httpparser: expected a key follows by a value in header of #%d request", i+i))
+				}
+
+				header[parts[0]] = parts[1]
+				continue
+			}
+			if line == "" {
+				continue
+			}
+
+			body = strings.Join(lines[j:], "\n")
+			break
+		}
+
+		request, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
+		if err != nil {
+			return nil, err
+		}
+
+		for key, value := range header {
+			request.Header.Set(key, value)
+		}
+
+		requests = append(requests, request)
+	}
+
+	return requests, nil
 }
 
 func isValidMethod(method string) bool {
