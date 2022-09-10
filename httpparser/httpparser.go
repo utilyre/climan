@@ -23,12 +23,7 @@ func Parse(filename string) ([]*http.Request, error) {
 	pieces := breakIntoPieces(lines)
 	pieces = removeEmptyLines(pieces)
 
-	requests, err := extractRequests(pieces)
-	if err != nil {
-		return nil, err
-	}
-
-	return requests, nil
+	return extractRequests(pieces)
 }
 
 func trimSpace(lines []string) []string {
