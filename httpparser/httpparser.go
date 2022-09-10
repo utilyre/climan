@@ -24,6 +24,10 @@ func Parse(filename string) ([]*http.Request, error) {
 	pieces = removeEmptyLines(pieces)
 
 	requests, err := extractRequests(pieces)
+	if err != nil {
+		return nil, err
+	}
+
 	return requests, nil
 }
 
