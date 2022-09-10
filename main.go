@@ -22,7 +22,7 @@ var (
 	showVersion *bool   = getopt.BoolLong("version", 'V', "show version")
 	amVerbose   *bool   = getopt.BoolLong("verbose", 'v', "output verbosely")
 	amRaw       *bool   = getopt.BoolLong("raw", 'r', "do not format response body")
-	color       *string = getopt.StringLong("color", 0, "auto", "whether to use escape sequences (auto, never, always)", "WHEN")
+	color       *string = getopt.StringLong("color", 0, "auto", "whether to use escape sequences (auto|never|always)", "WHEN")
 	index       *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
 	timeout     *int    = getopt.IntLong("timeout", 't', 0, "set maximum time for request to take in milliseconds", "NUM")
 
