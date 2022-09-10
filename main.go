@@ -15,7 +15,7 @@ import (
 	"github.com/utilyre/climan/httpparser"
 )
 
-const version string = "0.2.0"
+const version string = "0.2.1"
 
 var (
 	showHelp    *bool   = getopt.BoolLong("help", 'h', "show help")
