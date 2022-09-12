@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -153,12 +152,17 @@ func printBody(response *http.Response) {
 
 	switch response.Header.Get("Content-Type") {
 	case "application/json":
-		var prettified bytes.Buffer
-		if err = json.Indent(&prettified, raw, "", "\t"); err != nil {
+		var data map[string]any
+		if err := json.Unmarshal(raw, &data); err != nil {
 			goto resort
 		}
 
-		fmt.Println(string(prettified.Bytes()))
+		prettified, err := json.MarshalIndent(data, "", "\t")
+		if err != nil {
+			goto resort
+		}
+
+		fmt.Println(string(prettified))
 		return
 	}
 
