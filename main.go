@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	chalk "github.com/fatih/color"
@@ -147,25 +148,30 @@ func printBody(response *http.Response) {
 	}
 
 	if *amRaw {
-		goto resort
+		fmt.Println(string(raw))
+		return
 	}
 
-	switch response.Header.Get("Content-Type") {
+	contentType := response.Header.Get("Content-Type")
+	contentType = strings.Split(contentType, ";")[0]
+
+	switch contentType {
+	default:
+		fmt.Println(string(raw))
+
 	case "application/json":
 		var data map[string]any
 		if err := json.Unmarshal(raw, &data); err != nil {
-			goto resort
+			fmt.Println(string(raw))
+			return
 		}
 
 		prettified, err := json.MarshalIndent(data, "", "\t")
 		if err != nil {
-			goto resort
+			fmt.Println(string(raw))
+			return
 		}
 
 		fmt.Println(string(prettified))
-		return
 	}
-
-resort:
-	fmt.Println(string(raw))
 }
