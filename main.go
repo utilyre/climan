@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -142,7 +142,7 @@ func printHeader(response *http.Response) {
 }
 
 func printBody(response *http.Response) {
-	raw, err := ioutil.ReadAll(response.Body)
+	raw, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
