@@ -160,7 +160,7 @@ func printBody(response *http.Response) {
 		fmt.Println(string(raw))
 
 	case "application/json":
-		var data map[string]any
+		var data any
 		if err := json.Unmarshal(raw, &data); err != nil {
 			fmt.Println(string(raw))
 			return
