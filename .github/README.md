@@ -6,10 +6,19 @@ Make http requests from command line **BLAZINGLY FASTER**!
 
 - [Latest Release](https://github.com/utilyre/climan/releases/latest).
 
-- Go Modules
+- Manual
+
+  Clone the latest version of climan
 
   ```bash
-  go install github.com/utilyre/climan@latest
+  git clone --depth=1 --branch=v0.2.3 https://github.com/utilyre/climan.git
+  ```
+
+  Hop into the cloned repo and build
+
+  ```bash
+  cd climan
+  go build
   ```
 
 ## 🌟 Integration
