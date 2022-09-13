@@ -31,10 +31,9 @@ at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following content
 ```lua
 -- ~/.config/nvim/ftdetect/http.lua
 
-vim.api.nvim_create_augroup("fthttp", {})
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  group = "fthttp",
-  pattern = "*.http",
+  group = vim.api.nvim_create_augroup("fthttp", {}),
+  pattern = { "*.http", "*.rest" },
   callback = function(a)
     vim.bo[a.buf].filetype = "http"
     vim.bo[a.buf].commentstring = "#%s"
