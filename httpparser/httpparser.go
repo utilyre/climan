@@ -133,16 +133,19 @@ func removeEmptyLines(pieces [][]string) [][]string {
 
 func applyEnv(lines []string) []string {
 	text := strings.Join(lines, "\n")
-	rgx := regexp.MustCompile("\\$\\{.+?\\}")
+	rgx := regexp.MustCompile("[^\\\\]\\$\\{.+?\\}")
 
 	text = rgx.ReplaceAllStringFunc(text, func(match string) string {
-		key := match[2 : len(match)-1]
+		dollarIndex := strings.Index(match, "$")
+		prefix := match[:dollarIndex]
+
+		key := match[dollarIndex+2 : len(match)-1]
 		env, ok := os.LookupEnv(key)
 		if !ok {
 			return match
 		}
 
-		return env
+		return prefix + env
 	})
 
 	return strings.Split(text, "\n")
