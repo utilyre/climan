@@ -1,0 +1,45 @@
+.TH CLIMAN 1 2022-09-15 0.3.0
+
+.SH NAME
+climan \- a file based HTTP client
+
+.SH SYNOPSIS
+.B climan
+[\fB\-hrvV\fR]
+[\fB\-\-color\fR \fIWHEN\fR]
+[\fB\-i\fR \fINUM\fR]
+[\fB\-t\fR \fIMS\fR]
+FILE
+
+.SH DESCRIPTION
+.B climan
+makes a request from the given FILE, which must follow \fIRFC9110\fR standards, with all environment variables in the format of ${KEY} being replaced.
+
+.SH OPTIONS
+.TP
+.BR \-\-color " " \fIWHEN
+whether to use escape sequences.
+.TP
+.BR \-h ", " \-\-help
+show help.
+.TP
+.BR \-i ", " \-\-index " " \fINUM
+determine which request to make.
+.TP
+.BR \-r ", " \-\-raw
+do not format response body.
+.TP
+.BR \-t ", " \-\-timeout " " \fIMS
+set maximum time for a request to take.
+.TP
+.BR \-v ", " \-\-verbose
+output verbosely.
+.TP
+.BR \-V ", " \-\-version
+show version.
+
+.SH AUTHOR
+Amirabbas Fazelinia <utilyre@proton.me>
+
+.SH SEE ALSO
+\fBcurl\fR(1)
