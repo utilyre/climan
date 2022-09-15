@@ -23,10 +23,18 @@ jobs:
         run: go mod download
       - name: Compile source code
         run: |
-          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
-          env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+          mkdir bin
+          env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o bin
       - name: Archive files
         run: |
+          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
+          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
+          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+
+          cp LICENSE climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
+          cp man/climan.1 climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
+          cp bin/* climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+
           tar -czf climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
           zip -r climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.zip climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
@@ -92,6 +100,8 @@ jobs:
 
                ```bash
                cd climan-${{ github.ref_name }}-linux-[ARCH]
+               sudo install -Dm755 doc/LICENSE /usr/local/share/doc/climan/LICENSE
+               sudo install -Dm755 man/climan.1 /usr/local/share/man/man1/climan.1
                sudo install -Dm755 bin/climan /usr/local/bin/climan
                ```
 
@@ -125,6 +135,8 @@ jobs:
 
                ```bash
                cd climan-${{ github.ref_name }}-darwin-[ARCH]
+               sudo install -Dm755 doc/LICENSE /usr/local/share/doc/climan/LICENSE
+               sudo install -Dm755 man/climan.1 /usr/local/share/man/man1/climan.1
                sudo install -Dm755 bin/climan /usr/local/bin/climan
                ```
 
