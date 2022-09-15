@@ -11,7 +11,7 @@ Make http requests from command line **BLAZINGLY FASTER**!
   Clone the latest version of climan
 
   ```bash
-  git clone --depth=1 --branch=v0.2.4 https://github.com/utilyre/climan.git
+  git clone --depth=1 --branch=v0.3.0 https://github.com/utilyre/climan.git
   ```
 
   Hop into the cloned repo and build
