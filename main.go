@@ -148,9 +148,6 @@ func printBody(response *http.Response) {
 	contentType = strings.Split(contentType, ";")[0]
 
 	switch contentType {
-	default:
-		fmt.Println(string(raw))
-
 	case "application/json":
 		var data any
 		if err := json.Unmarshal(raw, &data); err != nil {
@@ -165,5 +162,8 @@ func printBody(response *http.Response) {
 		}
 
 		fmt.Println(string(prettified))
+
+	default:
+		fmt.Println(string(raw))
 	}
 }
