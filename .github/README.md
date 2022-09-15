@@ -95,10 +95,11 @@ Make the second request of `example.http` and output verbosely
 climan -vi 2 example.http
 ```
 
-Show help
+Learn more
 
 ```bash
 climan -h
+man climan
 ```
 
 ## 🔖 Todos
