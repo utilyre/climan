@@ -52,11 +52,11 @@ func setupCLI() {
 	getopt.SetParameters("FILE")
 	getopt.Parse()
 
-	if *showHelp {
+	switch {
+	case *showHelp:
 		getopt.PrintUsage(os.Stdout)
 		os.Exit(0)
-	}
-	if *showVersion {
+	case *showVersion:
 		fmt.Println(version)
 		os.Exit(0)
 	}
@@ -117,15 +117,16 @@ func printStatus(response *http.Response) {
 	protoColor := chalk.New(chalk.Bold, chalk.FgBlue)
 
 	statusColor := chalk.New(chalk.Bold)
-	if response.StatusCode < 200 {
+	switch {
+	case response.StatusCode < 200:
 		statusColor.Add(chalk.FgMagenta)
-	} else if response.StatusCode < 300 {
+	case response.StatusCode < 300:
 		statusColor.Add(chalk.FgGreen)
-	} else if response.StatusCode < 400 {
+	case response.StatusCode < 400:
 		statusColor.Add(chalk.FgCyan)
-	} else if response.StatusCode < 500 {
+	case response.StatusCode < 500:
 		statusColor.Add(chalk.FgRed)
-	} else if response.StatusCode < 600 {
+	case response.StatusCode < 600:
 		statusColor.Add(chalk.FgYellow)
 	}
 
