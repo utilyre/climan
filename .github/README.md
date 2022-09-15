@@ -1,6 +1,6 @@
 # 📝 CLI Man
 
-Make http requests from command line **BLAZINGLY FASTER**!
+Make HTTP requests from command line **BLAZINGLY FASTER**!
 
 ## 📦 Installation
 
@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 
 ## 🚀 Usage
 
-Http file example (see [examples](/examples) for more)
+HTTP file example (see [examples](/examples) for more)
 
 ```http
 # example.http
