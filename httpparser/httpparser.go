@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
@@ -13,22 +12,17 @@ import (
 
 const RequestSeparator string = "###"
 
-func Parse(filename string, index int) (*http.Request, error) {
+func Parse(src string, index int) (*http.Request, error) {
 	if index == 0 {
 		return nil, errors.New("httpparser: index must be nonzero")
 	}
 
-	content, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	lines := strings.Split(string(content), "\n")
+	lines := strings.Split(src, "\n")
 	lines = trimSpaces(lines)
 	lines = removeComments(lines)
 	pieces := breakIntoPieces(lines)
 
-	index, err = normalizeIndex(len(pieces), index)
+	index, err := normalizeIndex(len(pieces), index)
 	if err != nil {
 		return nil, err
 	}
@@ -42,6 +36,15 @@ func Parse(filename string, index int) (*http.Request, error) {
 	}
 
 	return request, nil
+}
+
+func ParseFile(name string, index int) (*http.Request, error) {
+	content, err := os.ReadFile(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return Parse(string(content), index)
 }
 
 func trimSpaces(lines []string) []string {

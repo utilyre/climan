@@ -80,7 +80,7 @@ func setupCLI() {
 }
 
 func getRequest() *http.Request {
-	request, err := httpparser.Parse(filename, *index)
+	request, err := httpparser.ParseFile(filename, *index)
 	if err != nil {
 		log.Fatalln(err)
 	}
