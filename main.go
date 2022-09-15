@@ -80,21 +80,12 @@ func setupCLI() {
 }
 
 func getRequest() *http.Request {
-	requests, err := httpparser.Parse(filename)
+	request, err := httpparser.Parse(filename, *index)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if *index == 0 {
-		log.Fatalln("index can not be zero")
-	} else if *index < -len(requests) || *index > len(requests) {
-		log.Fatalf("index must be greater than %d and less than %d\n", -len(requests)-1, len(requests)+1)
-	}
-	if *index < 0 {
-		*index = len(requests) + 1 + *index
-	}
-
-	return requests[*index-1]
+	return request
 }
 
 func sendRequest(request *http.Request) *http.Response {
