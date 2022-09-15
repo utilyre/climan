@@ -40,7 +40,10 @@ func removeComments(lines []string) []string {
 		if line == "" {
 			continue
 		}
-		if string(line[0]) != "#" || line == RequestSeparator {
+		if line == RequestSeparator {
+			continue
+		}
+		if string(line[0]) != "#" {
 			continue
 		}
 
