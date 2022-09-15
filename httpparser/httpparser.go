@@ -22,7 +22,7 @@ func Parse(filename string, index int) (*http.Request, error) {
 	}
 
 	lines := strings.Split(string(content), "\n")
-	lines = trimSpace(lines)
+	lines = trimSpaces(lines)
 	lines = removeComments(lines)
 	pieces := breakIntoPieces(lines)
 
@@ -35,7 +35,7 @@ func Parse(filename string, index int) (*http.Request, error) {
 	return extractRequests(pieces[index])
 }
 
-func trimSpace(lines []string) []string {
+func trimSpaces(lines []string) []string {
 	for i, line := range lines {
 		lines[i] = strings.TrimSpace(line)
 	}
