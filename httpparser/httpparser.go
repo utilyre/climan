@@ -36,7 +36,7 @@ func Parse(filename string, index int) (*http.Request, error) {
 	pieces = removeEmptyLines(pieces)
 	piece := applyEnv(pieces[index])
 
-	request, err := extractRequests(piece)
+	request, err := extractRequest(piece)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +145,7 @@ func applyEnv(lines []string) []string {
 	return strings.Split(text, "\n")
 }
 
-func extractRequests(lines []string) (*http.Request, error) {
+func extractRequest(lines []string) (*http.Request, error) {
 	method := ""
 	url := ""
 	header := map[string]string{}
