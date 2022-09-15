@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"regexp"
 	"strings"
 )
 
@@ -32,7 +34,14 @@ func Parse(filename string, index int) (*http.Request, error) {
 	}
 
 	pieces = removeEmptyLines(pieces)
-	return extractRequests(pieces[index])
+	piece := applyEnv(pieces[index])
+
+	request, err := extractRequests(piece)
+	if err != nil {
+		return nil, err
+	}
+
+	return request, nil
 }
 
 func trimSpaces(lines []string) []string {
@@ -117,6 +126,23 @@ func removeEmptyLines(pieces [][]string) [][]string {
 	}
 
 	return pieces
+}
+
+func applyEnv(lines []string) []string {
+	text := strings.Join(lines, "\n")
+	rgx := regexp.MustCompile("\\$\\{.+?\\}")
+
+	text = rgx.ReplaceAllStringFunc(text, func(match string) string {
+		key := match[2 : len(match)-1]
+		env, ok := os.LookupEnv(key)
+		if !ok {
+			return match
+		}
+
+		return env
+	})
+
+	return strings.Split(text, "\n")
 }
 
 func extractRequests(lines []string) (*http.Request, error) {
