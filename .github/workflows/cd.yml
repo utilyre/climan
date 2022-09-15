@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        os: [linux, darwin, windows]
+        os: [linux, darwin]
         arch: [amd64, arm64]
     steps:
       - name: Checkout version tag
@@ -41,14 +41,11 @@ jobs:
           mv bin/* climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
 
           tar -czf climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
-          zip -r climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.zip climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
-          path: |
-            climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
-            climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.zip
+          path: climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
   release:
     needs: build
     runs-on: ubuntu-22.04
@@ -59,10 +56,10 @@ jobs:
           path: dist
       - name: Move archives to cwd
         run: |
-          mv dist/*/*.tar.gz dist/*/*.zip .
+          mv dist/*/*.tar.gz .
           rm -r dist
       - name: Compute checksums
-        run: sha256sum *.tar.gz *.zip > sha256sums.txt
+        run: sha256sum *.tar.gz > sha256sums.txt
       - name: Create new release
         uses: softprops/action-gh-release@v1
         env:
@@ -89,25 +86,8 @@ jobs:
 
             2. Extract the downloaded archive.
 
-               - Gzip
-
                ```bash
                tar -xzf climan-${{ github.ref_name }}-linux-[ARCH].tar.gz
-               ```
-
-               - Zip
-
-               ```bash
-               unzip climan-${{ github.ref_name }}-linux-[ARCH].zip
-               ```
-
-            3. Install the included files
-
-               ```bash
-               cd climan-${{ github.ref_name }}-linux-[ARCH]
-               sudo install -Dm755 doc/* /usr/local/share/doc/climan
-               sudo install -Dm755 man/* /usr/local/share/man
-               sudo install -Dm755 bin/* /usr/local/bin
                ```
 
             ### 🍎 MacOS
@@ -124,57 +104,9 @@ jobs:
 
             2. Extract the downloaded archive.
 
-               - Gzip
-
                ```bash
                tar -xzf climan-${{ github.ref_name }}-darwin-[ARCH].tar.gz
                ```
-
-               - Zip
-
-               ```bash
-               unzip climan-${{ github.ref_name }}-darwin-[ARCH].zip
-               ```
-
-            3. Install the included files
-
-               ```bash
-               cd climan-${{ github.ref_name }}-darwin-[ARCH]
-               sudo install -Dm755 doc/* /usr/local/share/doc/climan
-               sudo install -Dm755 man/* /usr/local/share/man
-               sudo install -Dm755 bin/* /usr/local/bin
-               ```
-
-            ### 🪟 Windows
-
-            1. Verify checksums.
-
-               - Gzip
-
-               ```powershell
-               Get-FileHash -Algorithm SHA256 -Path climan-${{ github.ref_name }}-windows-[ARCH].tar.gz
-               ```
-
-               - Zip
-
-               ```powershell
-               Get-FileHash -Algorithm SHA256 -Path climan-${{ github.ref_name }}-windows-[ARCH].zip
-               ```
-
-               Now check if output of the previous command matches the
-               corresponding line of `sha256sums.txt`.
-
-            2. Extract the downloaded archive.
-
-            3. Append `%USERPROFILE%\bin` to `Path` environment variable.
-
-            4. Install the included files
-
-               ```powershell
-               Set-Location -Path climan-${{ github.ref_name }}-windows-[ARCH]
-               Copy-Item -Path bin\climan.exe -Destination %USERPROFILE%\bin\climan.exe
-               ```
           files: |
             *.tar.gz
-            *.zip
             sha256sums.txt
