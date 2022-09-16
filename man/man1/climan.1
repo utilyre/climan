@@ -18,25 +18,25 @@ makes a request from the given FILE, which should follow \fIRFC9110\fR standards
 .SH OPTIONS
 .TP
 .BR \-\-color " " \fIWHEN
-whether to use escape sequences.
+Whether to use escape sequences. Possible values are auto, never, and always.
 .TP
 .BR \-h ", " \-\-help
-show help.
+Show help and exit.
 .TP
 .BR \-i ", " \-\-index " " \fINUM
-determine which request to make.
+Determine which request to make. Negative values start from the end.
 .TP
 .BR \-r ", " \-\-raw
-do not format response body.
+Do not format response body.
 .TP
 .BR \-t ", " \-\-timeout " " \fIMS
-set maximum time for a request to take.
+Set maximum time for a request to take. Zero means no timeout.
 .TP
 .BR \-v ", " \-\-verbose
 output verbosely.
 .TP
 .BR \-V ", " \-\-version
-show version.
+Show version and exit.
 
 .SH AUTHOR
 Amirabbas Fazelinia <utilyre@proton.me>
