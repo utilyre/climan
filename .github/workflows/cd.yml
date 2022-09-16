@@ -23,22 +23,18 @@ jobs:
         run: go mod download
       - name: Compile source code
         run: |
-          mkdir doc
-          mkdir man
-          mkdir bin
+          mkdir doc man bin
 
-          mv LICENSE doc
+          mv LICENSE README.md examples doc
           gzip -9 man/*/*
           env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o bin
       - name: Archive files
         run: |
-          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
-          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
-          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+          mkdir climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
 
-          mv doc/* climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
-          mv man/* climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
-          mv bin/* climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
+          mv doc climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
+          mv man climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
+          mv bin climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/bin
 
           tar -czf climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
       - name: Create artifact assets
