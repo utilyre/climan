@@ -89,7 +89,7 @@ func getRequest() *http.Request {
 }
 
 func sendRequest(request *http.Request) *http.Response {
-	client := &http.Client{
+	client := http.Client{
 		Timeout: time.Duration(*timeout) * time.Millisecond,
 		CheckRedirect: func(request *http.Request, requests []*http.Request) error {
 			return http.ErrUseLastResponse
