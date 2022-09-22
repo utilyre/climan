@@ -23,14 +23,14 @@ jobs:
         run: go mod download
       - name: Compile source code
         run: |
-          mkdir doc man bin
+          mkdir -p doc man bin
 
           mv LICENSE README.md examples doc
           gzip -9 man/*/*
           env GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o bin
       - name: Archive files
         run: |
-          mkdir climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
+          mkdir -p climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}
 
           mv doc climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/doc
           mv man climan-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}/man
