@@ -1,6 +1,8 @@
-# 📝 CLI Man
+<h1 align="center">CLI Man</h1>
 
-Make HTTP requests from command line **BLAZINGLY FASTER**!
+<p align="center">
+  Make HTTP requests from command line <strong>BLAZINGLY FASTER</strong>!
+</p>
 
 ## 📦 Installation
 
