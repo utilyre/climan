@@ -10,9 +10,9 @@
 
 - [AUR](https://aur.archlinux.org/packages/climan-bin)
 
-```bash
-yay -S climan-bin
-```
+  ```bash
+  yay -S climan-bin
+  ```
 
 - Manual
 
