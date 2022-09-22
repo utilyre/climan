@@ -8,6 +8,12 @@
 
 - [Latest Release](https://github.com/utilyre/climan/releases/latest).
 
+- [AUR](https://aur.archlinux.org/packages/climan-bin)
+
+```bash
+yay -S climan-bin
+```
+
 - Manual
 
   Clone the latest version of climan
