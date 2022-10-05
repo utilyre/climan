@@ -56,11 +56,12 @@ HTTP file example (see [examples](/examples) for more)
 ```http
 # example.http
 
-# Method URL
+# [METHOD] [URL]
 POST http://localhost:8080
-# Header: Value
+# [Header]: [value]
 Content-Type: application/json
 User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
+Authorization: Bearer ${TOKEN}
 
 # Body
 {
@@ -83,6 +84,14 @@ Make the first (and maybe the only) request of `example.http`
 
 ```bash
 climan example.http
+```
+
+Make the first request of `example.http` and replace `${TOKEN}` with
+`INSERT_TOKEN_HERE`
+
+```bash
+export TOKEN="INSERT_TOKEN_HERE"
+climan -i 1 example.http
 ```
 
 Make the second request of `example.http`
