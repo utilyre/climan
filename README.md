@@ -120,7 +120,7 @@ climan -h
 man climan
 ```
 
-## 🔖 Todos
+## 🔖 To-do's
 
 - [x] Support for other request body types (like `text/xml` and `text/plain`).
 - [x] Parse the response body base on `Content-Type` header.
