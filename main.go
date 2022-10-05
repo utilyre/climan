@@ -26,7 +26,7 @@ var (
 	index       *int    = getopt.IntLong("index", 'i', 1, "determine which request to make", "NUM")
 	timeout     *int    = getopt.IntLong("timeout", 't', 0, "set maximum time for a request to take", "MS")
 
-	filename string = ""
+	filename string
 )
 
 func main() {
