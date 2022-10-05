@@ -62,6 +62,8 @@ POST http://localhost:8080
 # [Header]: [value]
 Content-Type: application/json
 User-Agent: Mozilla/5.0 (Windows NT 6.0; en-US; rv:1.9.1.20) Gecko/20140827 Firefox/35.0
+# Environment variables in the form of ${VAR} will be replaced with their corresponding value if any
+# Prefix $ with a backslash to ignore (e.g. \${VAR})
 Authorization: Bearer ${TOKEN}
 
 # Body
