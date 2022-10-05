@@ -33,8 +33,9 @@
 
 ### Neovim
 
-In order to get syntax highlighting with nvim-treesitter plugin create a file
-at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the following content
+In order to get syntax highlighting with nvim-treesitter plugin run `:TSInstall
+http` and create a file at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the
+following content
 
 ```lua
 -- ~/.config/nvim/ftdetect/http.lua
