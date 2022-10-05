@@ -93,7 +93,7 @@ func breakIntoPieces(lines []string) [][]string {
 
 func normalizeIndex(length, index int) (int, error) {
 	if index < -length || index > length {
-		return 0, errors.New(fmt.Sprintf("httpparser: index must be within %d and %d", -length, length))
+		return 0, fmt.Errorf("httpparser: index must be within %d and %d", -length, length)
 	}
 	if index < 0 {
 		return length + index, nil
@@ -165,7 +165,7 @@ func extractRequest(lines []string) (*http.Request, error) {
 				return nil, errors.New("httpparser: expected a http method followed by a url separated by one space")
 			}
 			if !isValidMethod(parts[0]) {
-				return nil, errors.New(fmt.Sprintf("httpparser: expected a http method instead of '%s'", parts[0]))
+				return nil, fmt.Errorf("httpparser: expected a http method instead of '%s'", parts[0])
 			}
 
 			method = parts[0]
