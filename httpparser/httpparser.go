@@ -1,3 +1,4 @@
+// Package httpparser implements functions to parse a http file.
 package httpparser
 
 import (
@@ -10,8 +11,11 @@ import (
 	"strings"
 )
 
+// RequestSeparator marks the line as the end of the previous request and the
+// beginning of the next request.
 const RequestSeparator string = "###"
 
+// Parse extracts http.Request inside src with the ordinal number of index.
 func Parse(src string, index int) (*http.Request, error) {
 	if index == 0 {
 		return nil, errors.New("httpparser: index must be nonzero")
@@ -38,6 +42,8 @@ func Parse(src string, index int) (*http.Request, error) {
 	return request, nil
 }
 
+// ParseFile is a wrapper for Parse in which reads the contents of the given
+// file name and passes it to Parse.
 func ParseFile(name string, index int) (*http.Request, error) {
 	content, err := os.ReadFile(name)
 	if err != nil {
