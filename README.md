@@ -34,19 +34,14 @@
 ### Neovim
 
 In order to get syntax highlighting with nvim-treesitter plugin run `:TSInstall
-http` and create a file at `$XDG_CONFIG_HOME/nvim/ftdetect/http.lua` with the
-following content
+http` and add the following to your config
 
 ```lua
--- ~/.config/nvim/ftdetect/http.lua
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  group = vim.api.nvim_create_augroup("fthttp", {}),
-  pattern = { "*.http", "*.rest" },
-  callback = function(a)
-    vim.bo[a.buf].filetype = "http"
-    vim.bo[a.buf].commentstring = "#%s"
-  end,
+vim.filetype.add({
+  extension = {
+    http = "http",
+    rest = "http",
+  },
 })
 ```
 
